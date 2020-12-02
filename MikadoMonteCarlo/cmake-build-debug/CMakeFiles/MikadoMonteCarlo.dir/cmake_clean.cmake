@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/MikadoMonteCarlo.dir/Medium.cpp.o"
+  "CMakeFiles/MikadoMonteCarlo.dir/Rod.cpp.o"
   "CMakeFiles/MikadoMonteCarlo.dir/main.cpp.o"
   "MikadoMonteCarlo"
   "MikadoMonteCarlo.pdb"

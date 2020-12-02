@@ -3,4 +3,4 @@ project(MikadoMonteCarlo)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(MikadoMonteCarlo main.cpp)
+add_executable(MikadoMonteCarlo main.cpp Rod.cpp Rod.h Medium.cpp Medium.h MediumParameters.h)
