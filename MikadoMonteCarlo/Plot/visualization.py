@@ -50,7 +50,7 @@ rods = []
 l = 0.1
 w = 0.001
 for i in range(30):
-    rods.append(Rod(0.03*i+0*np.random.rand(),np.random.rand(),0.1*i+0*np.random.rand()*np.pi,l,w))
+    rods.append(Rod(0.03*i+0*np.random.rand(),np.random.rand(),0.1*i+0*np.random.rand()*np.pi,l,w)) # should instead be read from file
 
 
 while frame_active:
