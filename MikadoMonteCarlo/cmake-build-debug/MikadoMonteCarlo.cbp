@@ -90,7 +90,13 @@
 		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/Medium.h">
 			<Option target="MikadoMonteCarlo"/>
 		</Unit>
-		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/Mediums.h">
+		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/MediumParameters.h">
+			<Option target="MikadoMonteCarlo"/>
+		</Unit>
+		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/MonteCarloLoop.cpp">
+			<Option target="MikadoMonteCarlo"/>
+		</Unit>
+		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/MonteCarloLoop.h">
 			<Option target="MikadoMonteCarlo"/>
 		</Unit>
 		<Unit filename="/home/tovermodus/CLionProjects/monte_carlo_methods/MikadoMonteCarlo/Rod.cpp">
