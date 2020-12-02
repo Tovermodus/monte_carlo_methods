@@ -1,0 +1,1 @@
+/usr/bin/clang++  -g   CMakeFiles/MikadoMonteCarlo.dir/main.cpp.o CMakeFiles/MikadoMonteCarlo.dir/Rod.cpp.o CMakeFiles/MikadoMonteCarlo.dir/Medium.cpp.o  -o MikadoMonteCarlo 
