@@ -5,7 +5,7 @@
 #include "Rod.h"
 bool Rod::check_collision (const Rod& other)
 {
-	throw "Not Implemented yet";
+	throw "Not implemented yet";
 }
 Rod::Rod(double initial_x, double initial_y, double initial_phi, double width, double length)
 {
