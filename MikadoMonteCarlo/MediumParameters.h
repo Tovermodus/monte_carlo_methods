@@ -8,47 +8,47 @@
 
 class MediumParameters {
 public:
-	const double rod_length;
-	const double rod_width;
-	const double rod_density;
-	const double aspect_ratio;
+	double rod_length;
+	double rod_width;
+	double rod_density;
+	double aspect_ratio;
 
-	const double rods_per_volume;
+	double rods_per_volume;
 
-	const double density;
-	const double viscosity;
-	const bool periodic_boundary_conditions;
-	const double width;
-	const double height;
+	double density;
+	double viscosity;
+	bool periodic_boundary_conditions;
+	double width;
+	double height;
 
-	const double gravity;
-	const double temperature;
-	const double boltz = 1.38064852e-23; //m^2 kg s^-2 K^-1
-	const double end_correction_rotation = -0.662;
-	const double end_correction_parallel = -0.207;
-	const double end_correction_perpendicular = 0.839;
-	const double friction_rotation;
-	const double friction_parallel;
-	const double friction_perpendicular;
+	double gravity;
+	double temperature;
+	double boltz = 1.38064852e-23; //m^2 kg s^-2 K^-1
+	double end_correction_rotation = -0.662;
+	double end_correction_parallel = -0.207;
+	double end_correction_perpendicular = 0.839;
+	double friction_rotation;
+	double friction_parallel;
+	double friction_perpendicular;
 
-	const double diffusion_coefficient_rotation;
-	const double diffusion_coefficient_parallel;
-	const double diffusion_coefficient_perpendicular;
+	double diffusion_coefficient_rotation;
+	double diffusion_coefficient_parallel;
+	double diffusion_coefficient_perpendicular;
 
-	MediumParameters(const double rod_length,
-			 const double rod_width,
-			 const double rod_density,
-			 const double rods_per_volume,
-			 const double density,
-			 const double viscosity,
-			 const bool periodic_boundary_conditions,
-			 const double width,
-			 const double height,
-			 const double gravity,
-			 const double temperature,
-			 const double end_correction_rotation,
-			 const double end_correction_parallel,
-			 const double end_correction_perpendicular)
+	MediumParameters(double rod_length,
+			 double rod_width,
+			 double rod_density,
+			 double rods_per_volume,
+			 double density,
+			 double viscosity,
+			 bool periodic_boundary_conditions,
+			 double width,
+			 double height,
+			 double gravity,
+			 double temperature,
+			 double end_correction_rotation,
+			 double end_correction_parallel,
+			 double end_correction_perpendicular)
 		: rod_length(rod_length),
 		  rod_width(rod_width),
 		  rod_density(rod_density),
@@ -74,7 +74,7 @@ public:
 		  diffusion_coefficient_perpendicular(boltz*temperature/friction_perpendicular)
 	{}
 
-	MediumParameters(MediumParameters &params)
+	MediumParameters(const MediumParameters& params)
 		: rod_length(params.rod_length),
 		  rod_width(params.rod_width),
 		  rod_density(params.rod_density),

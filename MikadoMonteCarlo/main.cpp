@@ -1,7 +1,9 @@
 #include <iostream>
-
+#include <vector>
+#include <functional>
+#include <ctime>
 int main ()
 {
-	std::cout << "Hello, World!" << std::endl;
+
 	return 0;
 }
