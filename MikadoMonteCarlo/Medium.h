@@ -18,7 +18,7 @@ class TrialMedium {
 	Rod move_random(Rod r, const double & time_step, std::mt19937 rng);
     public:
 	const MediumParameters * const  parameters;
-	TrialMedium(const MediumParameters &params, const std::vector<Rod> & previous_rods);
+	TrialMedium(const MediumParameters &params, std::vector<Rod> & previous_rods);
 	double calculate_energy() const;
 	Rod get_changed_rod() const {return rods[changed_rod_index].get();}
 	int get_changed_rod_index() const {return changed_rod_index;}
