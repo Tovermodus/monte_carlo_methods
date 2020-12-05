@@ -33,6 +33,18 @@ public:
 			phi += M_PI; //PI should be sufficient, since it makes no difference wether a rod is upside down or not
 	}
 	bool check_collision(const Rod& other);
+	double get_x() const
+	{
+		return x;
+	}
+	double  get_y() const
+	{
+		return y;
+	}
+	double get_angle() const
+	{
+		return phi;
+	}
 
 };
 

@@ -2,6 +2,8 @@
 // Created by tovermodus on 12/2/20.
 //
 
+#include <sstream>
+#include <iomanip>
 #include "Medium.h"
 Medium::Medium (const MediumParameters& params):parameters(params)
 
@@ -24,6 +26,16 @@ void Medium::update(TrialMedium trial_medium)
 {
 	rods[trial_medium.get_changed_rod_index()] = trial_medium.get_changed_rod();
 }
+std::string Medium::to_string() const
+{
+	std::ostringstream ret;
+	for(Rod r: rods){
+		ret << std::setw(5) << std::scientific << r.get_x() << " ";
+		ret << std::setw(5) << std::scientific << r.get_y() << " ";
+		ret << std::setw(5) << std::scientific << r.get_angle() << "\n";
+	}
+	return ret.str();
+}
 TrialMedium::TrialMedium(const MediumParameters &params, std::vector<Rod> &previous_rods) : parameters(&params)
 {
 	rods = std::vector<std::reference_wrapper<Rod>>(previous_rods.begin(),previous_rods.end());
@@ -45,5 +57,6 @@ Rod TrialMedium::move_random(Rod r, const double &time_step, std::mt19937 rng)
 }
 //This function generates the output which is then written to a file
 std::ostream &operator<<(std::ostream &os, Medium const &m) {
-	throw "Not Implemented yet";
+	os << m.to_string();
+	return os;
 }

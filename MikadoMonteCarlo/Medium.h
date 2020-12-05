@@ -35,6 +35,7 @@ class Medium {
 	double calculate_energy() const;
 	TrialMedium get_trial_medium();
 	void update(TrialMedium trial_medium);
+	std::string to_string() const;
 };
 
 
