@@ -6,12 +6,13 @@
 #define _ROD_H_
 
 #include <cmath>
+#include <array>
 
 class Rod {
 private:
 	double x;
 	double y;
-	double phi;
+	double phi; //angle between length and x-axis
 	double width;
 	double length;
 public:
@@ -32,7 +33,9 @@ public:
 		if(phi < 0)
 			phi += M_PI; //PI should be sufficient, since it makes no difference wether a rod is upside down or not
 	}
-	bool check_collision(const Rod& other);
+	bool check_collision(const Rod& other) const;
+	std::array<double,4> get_line_information(int line_index) const; //centre of line in x,y, angle, length
+
 
 };
 
