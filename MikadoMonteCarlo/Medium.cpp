@@ -30,9 +30,9 @@ std::string Medium::to_string() const
 {
 	std::ostringstream ret;
 	for(Rod r: rods){
-		ret << std::setw(5) << std::scientific << r.get_x() << " ";
-		ret << std::setw(5) << std::scientific << r.get_y() << " ";
-		ret << std::setw(5) << std::scientific << r.get_angle() << "\n";
+		ret << std::scientific << r.get_x() << " ";
+		ret << std::scientific << r.get_y() << " ";
+		ret << std::scientific << r.get_angle() << "\n";
 	}
 	return ret.str();
 }
