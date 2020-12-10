@@ -10,7 +10,6 @@
 
 class Rod {
 private:
-	Rod(const Rod *p_rod) const;
 	double x;
 	double y;
 	double phi; //angle between length and x-axis
