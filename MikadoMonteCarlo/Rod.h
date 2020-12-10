@@ -33,6 +33,7 @@ public:
 	}
 	void move_phi(double delta_phi)
 	{
+		std::cout << delta_phi << "delta\n";
 		phi += delta_phi;
 		if(phi > M_PI)
 			phi -= M_PI;

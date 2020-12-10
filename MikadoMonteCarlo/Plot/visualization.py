@@ -16,6 +16,10 @@ def plot_file(name):
     print(name)
     f = open(name)
     lines = f.readlines()
+    whline = lines[0][:-1]
+    ws,hs =whline.split(' ')
+    dh = float(hs)
+    dw = float(ws)
     lwline = lines[1][:-1]
     ws,ls =lwline.split(' ')
     l = float(ls)
@@ -23,7 +27,7 @@ def plot_file(name):
     for i in range(2,len(lines)):
         x,y,phi = lines[i].split(' ')
         #print(x,y,phi)
-        rods.append(Rod(float(x),float(y),float(phi),l,w))
+        rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
 
 
 
@@ -40,16 +44,16 @@ def plot_file(name):
 
 
 class Rod:
-    def __init__(self, x, y, phi, length, width):
+    def __init__(self, x, y, phi, length, width, domain_w, domain_h):
         self.x = x
         self.y = y
         self.phi = phi
         self.length = length
         self.width = width
-        self.drawx = 50+x/1.0*(pix_w - 100) #replace 1.0 with size of domain,
-        self.drawy = 50+y/1.0*(pix_h - 100)
-        self.drawlength = length/1.0*(pix_w - 100)
-        self.drawwidth = width/1.0*(pix_w - 100)
+        self.drawx = 50+x/domain_w*(pix_w - 100) #replace 1.0 with size of domain,
+        self.drawy = 50+y/domain_h*(pix_h - 100)
+        self.drawlength = length/domain_w*(pix_w - 100)
+        self.drawwidth = width/domain_h*(pix_w - 100)
         self.line=self.drawwidth < 2
     def draw(self):
         length_radius_x = np.cos(self.phi)*self.drawlength/2
@@ -74,7 +78,7 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(10000/20)):
+    for i in range(int(1000/20)):
         if frame_active == False:
             break
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
