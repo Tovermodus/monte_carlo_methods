@@ -24,7 +24,15 @@ void Medium::initialize_rods(const std::mt19937 & rng)
 }
 double Medium::calculate_energy() const
 {
-	throw "Not Implemented yet";
+	int rodnr= rods.size();
+	for (int i = 0; i < rodnr; ++i) {
+		for (int j = 0; j < rodnr; ++j) {
+			if (rods[i].check_collision(rods[j]) && i!=j) {
+				return 1e100;
+			}
+		}
+	}
+	return 0;
 }
 TrialMedium Medium::get_trial_medium()
 {
@@ -61,7 +69,15 @@ void TrialMedium::random_movement(const double &time_step, const std::mt19937 & 
 }
 double TrialMedium::calculate_energy() const
 {
-	throw "Not Implemented yet";
+	int rodnr= rods.size();
+	for (int i = 0; i < rodnr; ++i) {
+		for (int j = 0; j < rodnr; ++j) {
+			if (rods[i].get().check_collision(rods[j].get()) && i!=j) {
+				return 1e100;
+			}
+		}
+	}
+	return 0;
 }
 Rod TrialMedium::move_random(Rod r, const double &time_step, const std::mt19937 & rng)
 {
