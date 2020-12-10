@@ -14,6 +14,7 @@ public:
 	double aspect_ratio;
 
 	double rods_per_volume;
+	int rod_placing_max_iterations;
 
 	double density;
 	double viscosity;
@@ -39,6 +40,7 @@ public:
 			 double rod_width,
 			 double rod_density,
 			 double rods_per_volume,
+			 int rod_placing_max_iterations,
 			 double density,
 			 double viscosity,
 			 bool periodic_boundary_conditions,
@@ -53,6 +55,7 @@ public:
 		  rod_width(rod_width),
 		  rod_density(rod_density),
 		  rods_per_volume(rods_per_volume),
+		  rod_placing_max_iterations(rod_placing_max_iterations),
 		  density(density),
 		  viscosity(viscosity),
 		  periodic_boundary_conditions(periodic_boundary_conditions),
@@ -60,7 +63,6 @@ public:
 		  height(height),
 		  gravity(gravity),
 		  temperature(temperature),
-		  boltz(boltz),
 		  end_correction_rotation(end_correction_rotation),
 		  end_correction_parallel(end_correction_parallel),
 		  end_correction_perpendicular(end_correction_perpendicular),
@@ -79,6 +81,7 @@ public:
 		  rod_width(params.rod_width),
 		  rod_density(params.rod_density),
 		  rods_per_volume(params.rods_per_volume),
+		  rod_placing_max_iterations(params.rod_placing_max_iterations),
 		  density(params.density),
 		  viscosity(params.viscosity),
 		  periodic_boundary_conditions(params.periodic_boundary_conditions),

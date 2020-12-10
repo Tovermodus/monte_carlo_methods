@@ -32,25 +32,29 @@ class Rod:
             width_radius_x = np.sin(self.phi)*self.drawwidth/2
             width_radius_y = np.cos(self.phi)*self.drawwidth/2
             vertices.append([int(self.drawx + length_radius_x - width_radius_x),
-                             int(self.drawy + length_radius_y + width_radius_y)])
+                             pix_h-int(self.drawy + length_radius_y + width_radius_y)])
             vertices.append([int(self.drawx + length_radius_x + width_radius_x),
-                             int(self.drawy + length_radius_y - width_radius_y)])
+                             pix_h-int(self.drawy + length_radius_y - width_radius_y)])
             vertices.append([int(self.drawx - length_radius_x + width_radius_x),
-                             int(self.drawy - length_radius_y - width_radius_y)])
+                             pix_h-int(self.drawy - length_radius_y - width_radius_y)])
             vertices.append([int(self.drawx - length_radius_x - width_radius_x),
-                             int(self.drawy - length_radius_y + width_radius_y)])
+                             pix_h-int(self.drawy - length_radius_y + width_radius_y)])
             pygame.draw.polygon(screen,(0,0,0),vertices)
         else:
             pygame.draw.line(screen,(0,0,0),[int(self.drawx + length_radius_x),
-                                             int(self.drawy + length_radius_y)],
+                                             pix_h-int(self.drawy + length_radius_y)],
                                             [int(self.drawx - length_radius_x),
-                                             int(self.drawy - length_radius_y)])
+                                             pix_h-int(self.drawy - length_radius_y)])
 
 rods = []
-l = 0.1
-w = 0.001
-for i in range(30):
-    rods.append(Rod(0.03*i+0*np.random.rand(),np.random.rand(),0.1*i+0*np.random.rand()*np.pi,l,w)) # should instead be read from file
+l = 0.3
+w = 0.05
+#for i in range(30):
+#    rods.append(Rod(0.03*i+0*np.random.rand(),np.random.rand(),0.1*i+0*np.random.rand()*np.pi,l,w)) # should instead be read from file
+rods.append(Rod(0.5, 0.5, 1.4, l, w))
+#rods.append(Rod(0.4,0.4,0.4,l,w))
+rods.append(Rod(0.6, 0.75, 1.6, l, w))
+rods.append(Rod(0.5, 0.75, 1.6, l, w))
 
 
 while frame_active:
