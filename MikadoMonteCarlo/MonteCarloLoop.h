@@ -14,12 +14,13 @@ class MonteCarloLoop {
 	double time;
 	std::mt19937 rng;
 	std::uniform_real_distribution<double> uniform_distribution;
-	double acceptance_probability(TrialMedium tm) const;
+	double acceptance_probability(const TrialMedium& tm) const;
 
 
     public:
-	MonteCarloLoop(const MediumParameters & parameters, const double & time_step);
+	MonteCarloLoop(const MediumParameters & parameters, std::mt19937 rng, const double & time_step);
 	void monte_carlo_step();
+	void printToFile(const std::string& filename);
 };
 
 #endif //MIKADOMONTECARLO__MONTECARLOLOOP_H_

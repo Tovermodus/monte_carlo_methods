@@ -47,10 +47,7 @@ public:
 			 double width,
 			 double height,
 			 double gravity,
-			 double temperature,
-			 double end_correction_rotation,
-			 double end_correction_parallel,
-			 double end_correction_perpendicular)
+			 double temperature)
 		: rod_length(rod_length),
 		  rod_width(rod_width),
 		  rod_density(rod_density),
@@ -63,12 +60,9 @@ public:
 		  height(height),
 		  gravity(gravity),
 		  temperature(temperature),
-		  end_correction_rotation(end_correction_rotation),
-		  end_correction_parallel(end_correction_parallel),
-		  end_correction_perpendicular(end_correction_perpendicular),
 		  aspect_ratio(rod_length/rod_width),
 		  friction_rotation(
-			  M_PI*viscosity*std::pow(rod_length, 3)/3*(std::log(aspect_ratio) + end_correction_rotation)),
+			  M_PI*viscosity*std::pow(rod_length, 3)/(3*(std::log(aspect_ratio) + end_correction_rotation))),
 		  friction_parallel(2*M_PI*viscosity*rod_length/(std::log(aspect_ratio) + end_correction_parallel)),
 		  friction_perpendicular(4*M_PI*viscosity*rod_length/(std::log(aspect_ratio) + end_correction_perpendicular)),
 		  diffusion_coefficient_rotation(boltz*temperature/friction_rotation),

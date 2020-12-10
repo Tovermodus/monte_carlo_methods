@@ -47,14 +47,54 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 rods = []
-l = 0.3
-w = 0.05
-#for i in range(30):
-#    rods.append(Rod(0.03*i+0*np.random.rand(),np.random.rand(),0.1*i+0*np.random.rand()*np.pi,l,w)) # should instead be read from file
-rods.append(Rod(0.5, 0.5, 1.4, l, w))
-#rods.append(Rod(0.4,0.4,0.4,l,w))
-rods.append(Rod(0.6, 0.75, 1.6, l, w))
-rods.append(Rod(0.5, 0.75, 1.6, l, w))
+
+f = open("/home/tovermodus/Documents/Studium/9S/Monte Carlo/code/monte_carlo_methods/MikadoMonteCarlo/cmake-build-debug/start.txt")
+lines = f.readlines()
+lwline = lines[1][:-1]
+ws,ls =lwline.split(' ')
+l = float(ls)
+w = float(ws)
+for i in range(2,len(lines)):
+    x,y,phi = lines[i].split(' ')
+    print(x,y,phi)
+    rods.append(Rod(float(x),float(y),float(phi),l,w))
+
+
+
+while frame_active:
+    for event in pygame.event.get():
+        if event.type== pygame.QUIT:
+            frame_active = False
+    screen.fill((255,255,255))
+    for rod in rods:
+        rod.draw()
+    pygame.display.flip()
+    clock.tick(30)
+
+
+
+pygame.init()
+
+pix_w = 1000# (pix_w - 100)/(pix_h - 100) must be equal to w/h from real domain
+pix_h = 1000
+screen = pygame.display.set_mode((pix_w,pix_h))
+clock = pygame.time.Clock()
+pygame.display.set_caption("Data Visualisation")
+
+frame_active = True
+rods = []
+
+f = open("/home/tovermodus/Documents/Studium/9S/Monte Carlo/code/monte_carlo_methods/MikadoMonteCarlo/cmake-build-debug/end.txt")
+lines = f.readlines()
+lwline = lines[1][:-1]
+ws,ls =lwline.split(' ')
+l = float(ls)
+w = float(ws)
+for i in range(2,len(lines)):
+    x,y,phi = lines[i].split(' ')
+    print(x,y,phi)
+    rods.append(Rod(float(x),float(y),float(phi),l,w))
+
 
 
 while frame_active:
