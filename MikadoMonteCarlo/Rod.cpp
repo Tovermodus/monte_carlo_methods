@@ -68,3 +68,21 @@ std::array<double, 4> Rod::get_line_information(int line_index) const
 		angle -= M_PI;
 	return std::array<double,4>{center_x,center_y,angle,len};
 }
+Rod Rod::generate_moved_rod(double parallel_movement, double perpendicular_movement, double rotation_movement) const
+{
+	Rod moved_rod = Rod(*this);
+	moved_rod.move_x(parallel_movement*std::cos(phi));
+	moved_rod.move_y(parallel_movement*std::sin(phi));
+	moved_rod.move_x(perpendicular_movement*std::cos(phi+M_PI));
+	moved_rod.move_y(perpendicular_movement*std::sin(phi+M_PI));
+	moved_rod.move_phi(rotation_movement);
+	return moved_rod;
+}
+Rod::Rod(const Rod & r)
+{
+	this->x = r.x;
+	this->y = r.y;
+	this->phi = r.phi;
+	this->width = r.width;
+	this->length = r.length;
+}

@@ -15,7 +15,7 @@ class TrialMedium {
     private:
 	std::vector<std::reference_wrapper<Rod>> rods;
 	int changed_rod_index;
-	Rod move_random(Rod r, const double & time_step, const std::mt19937 & rng);
+	Rod move_random(const Rod & r, const double & time_step, const std::mt19937 & rng) const;
     public:
 	const MediumParameters * const  parameters;
 	TrialMedium(const MediumParameters &params, std::vector<Rod> & previous_rods);

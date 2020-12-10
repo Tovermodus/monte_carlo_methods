@@ -10,6 +10,7 @@
 
 class Rod {
 private:
+	Rod(const Rod *p_rod) const;
 	double x;
 	double y;
 	double phi; //angle between length and x-axis
@@ -17,6 +18,7 @@ private:
 	double length;
 public:
 	Rod(double initial_x, double initial_y, double initial_phi, double width, double length);
+	Rod(const Rod & r);
 	void move_x(double delta_x)
 	{
 		x += delta_x;
@@ -35,7 +37,7 @@ public:
 	}
 	bool check_collision(const Rod& other) const;
 	std::array<double,4> get_line_information(int line_index) const; //centre of line in x,y, angle, length
-
+	Rod generate_moved_rod(double parallel_movement, double perpendicular_movement, double rotation_movement) const ;
 
 };
 
