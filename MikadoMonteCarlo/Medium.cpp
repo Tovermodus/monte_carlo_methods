@@ -10,6 +10,7 @@ Medium::Medium (const MediumParameters& params,const std::mt19937 & rng):paramet
 }
 void Medium::initialize_rods(const std::mt19937 & rng)
 {
+	rods = std::vector<Rod>();
 	int iterations = 0;
 	int total_number_of_rods = (int)(parameters.rods_per_volume*parameters.width*parameters.height);
 	while(rods.size() < total_number_of_rods && iterations < parameters.rod_placing_max_iterations)
