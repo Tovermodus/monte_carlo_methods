@@ -23,3 +23,9 @@ TEST(RodTests, collisiontest2)
 	ASSERT_FALSE(r2.check_collision(r3));
 	ASSERT_FALSE(r1.check_collision(r3));
 }
+TEST(RodTests, onTopTest)
+{
+	Rod r1(0.5,0.5,1.4,0.05,0.3);
+	Rod r2(0.5,0.5,1.4,0.05,0.3);
+	ASSERT_TRUE(r1.check_collision(r2));
+}
