@@ -7,6 +7,8 @@
 #include "math_functions.h"
 bool Rod::check_collision (const Rod& other) const
 {
+	if(std::abs(get_x() - other.get_x()) + std::abs(get_y() - other.get_y()) > length + width)
+		return false;
 	std::array<double,4> line_information_this{}, line_information_other{};
 	for (int i = 0; i < 4; i++) {
 		line_information_this = get_line_information(i);
@@ -86,3 +88,4 @@ Rod::Rod(const Rod & r)
 	this->width = r.width;
 	this->length = r.length;
 }
+

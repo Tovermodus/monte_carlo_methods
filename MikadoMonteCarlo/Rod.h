@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <array>
+#include <iostream>
 
 class Rod {
 private:
@@ -18,6 +19,10 @@ private:
 public:
 	Rod(double initial_x, double initial_y, double initial_phi, double width, double length);
 	Rod(const Rod & r);
+	std::string to_string() const
+	{
+		return std::to_string(get_x())+" "+std::to_string(get_y())+" "+std::to_string(get_angle());
+	}
 	void move_x(double delta_x)
 	{
 		x += delta_x;

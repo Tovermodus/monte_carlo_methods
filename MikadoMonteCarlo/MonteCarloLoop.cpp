@@ -16,7 +16,8 @@ void MonteCarloLoop::monte_carlo_step()
 {
 	TrialMedium tm = m.get_trial_medium();
 	tm.random_movement(time_step, rng);
-	if (uniform_distribution(rng) < acceptance_probability(tm)) {
+	double ran = uniform_distribution(rng);
+	if (ran < acceptance_probability(tm)) {
 		m.update(tm);
 		time += time_step;
 	}
@@ -24,6 +25,7 @@ void MonteCarloLoop::monte_carlo_step()
 double MonteCarloLoop::acceptance_probability(const TrialMedium& tm) const
 {
 	double delta_energy = tm.calculate_energy() - m.calculate_energy();
+	std::cout <<tm.calculate_energy() << " " << m.calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m.parameters.boltz * m.parameters.temperature)))<<"\n";
 	return 	std::min(1., std::exp(-delta_energy / (m.parameters.boltz * m.parameters.temperature)));
 }
 std::ostream &operator<<(std::ostream &os, Medium const &m) {

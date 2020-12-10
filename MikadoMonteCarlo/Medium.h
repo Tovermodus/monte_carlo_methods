@@ -14,13 +14,20 @@
 class TrialMedium {
     private:
 	std::vector<std::reference_wrapper<Rod>> rods;
+	std::shared_ptr<Rod> changed_rod;
 	int changed_rod_index;
 	Rod move_random(const Rod & r, const double & time_step, std::mt19937 & rng) const;
     public:
 	const MediumParameters * const  parameters;
 	TrialMedium(const MediumParameters &params, std::vector<Rod> & previous_rods);
 	double calculate_energy() const;
-	Rod get_changed_rod() const {return rods[changed_rod_index].get();}
+	Rod& get_rod(std::size_t index) const
+	{
+		if(changed_rod_index == index)
+			return *changed_rod;
+		return rods[index];
+	}
+	Rod get_changed_rod() const {return *changed_rod;}
 	int get_changed_rod_index() const {return changed_rod_index;}
 	void random_movement(const double & time_step, std::mt19937 & rng);
 };

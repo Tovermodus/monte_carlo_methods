@@ -3,8 +3,6 @@
 //
 
 #include <sstream>
-#include <iomanip>
-#include <iostream>
 #include "Medium.h"
 Medium::Medium (const MediumParameters& params,std::mt19937 & rng):parameters(params)
 
@@ -27,15 +25,18 @@ void Medium::initialize_rods(std::mt19937 & rng)
 }
 double Medium::calculate_energy() const
 {
-	int rodnr= rods.size();
+	double ret = 0;
+	int rodnr = rods.size();
 	for (int i = 0; i < rodnr; ++i) {
+		ret += rods[i].get_y()*parameters.gravity;
 		for (int j = 0; j < rodnr; ++j) {
+
 			if (rods[i].check_collision(rods[j]) && i!=j) {
 				return 1e100;
 			}
 		}
 	}
-	return 0;
+	return ret;
 }
 TrialMedium Medium::get_trial_medium()
 {
@@ -83,21 +84,21 @@ void TrialMedium::random_movement(const double &time_step, std::mt19937 & rng)
 	std::uniform_int_distribution<> distrib(0, rods.size()-1);
 	changed_rod_index = distrib(rng);
 	Rod new_rod = move_random(rods[changed_rod_index],time_step,rng);
-	std::cout <<new_rod.get_x() << " " << new_rod.get_y() << " " << new_rod.get_angle() <<"\n";
-	rods[changed_rod_index] = std::ref(new_rod);
-	std::cout <<get_changed_rod().get_x() << " " << get_changed_rod().get_y() << " " << get_changed_rod().get_angle() <<"\n";
+	changed_rod = std::make_shared<Rod>(new_rod);
 }
 double TrialMedium::calculate_energy() const
 {
-	int rodnr= rods.size();
+	double ret = 0;
+	int rodnr = rods.size();
 	for (int i = 0; i < rodnr; ++i) {
+		ret += get_rod(i).get_y()*parameters->gravity;
 		for (int j = 0; j < rodnr; ++j) {
-			if (rods[i].get().check_collision(rods[j].get()) && i!=j) {
+			if (get_rod(i).check_collision(get_rod(j)) && i!=j) {
 				return 1e100;
 			}
 		}
 	}
-	return 0;
+	return ret;
 }
 Rod TrialMedium::move_random(const Rod & r, const double &time_step, std::mt19937 & rng) const
 {
@@ -110,7 +111,6 @@ Rod TrialMedium::move_random(const Rod & r, const double &time_step, std::mt1993
 	double parallel_movement = parallel_distrib(rng);
 	double perpendicular_movement = perpendicular_distrib(rng);
 	double rotation_movement = rotation_distrib(rng);
-	std::cout <<parallel_movement << " " << perpendicular_movement << " " << rotation_movement <<"\n";
 	return r.generate_moved_rod(parallel_movement,perpendicular_movement,rotation_movement);
 
 
