@@ -20,11 +20,11 @@ class Medium {
 	std::shared_ptr<Cell> get_cell_of_rod(const std::shared_ptr<Rod> &rod) const;
 	std::shared_ptr<Cell> get_cell_of_position(double x, double y) const;
 	std::vector<std::shared_ptr<Cell>> get_neighbours_of_cell(const std::shared_ptr<Cell> & cell) const;
+	void initialize_rods(std::mt19937 & rng);
+	void initialize_cells();
     public:
 	const MediumParameters parameters;
 	explicit Medium(const MediumParameters &params, std::mt19937 & rng);
-	void initialize_rods(std::mt19937 & rng);
-	void initialize_cells();
 	double calculate_energy() const;
 	std::string to_string() const;
 
@@ -42,6 +42,8 @@ class Medium {
 		double parallel_movement;
 		double perpendicular_movement;
 		double rotation_movement;
+
+		bool nothing_to_move = false;
 	    public:
 		Movement(const std::shared_ptr<Medium>  & m, double time_step, std::mt19937 & rng);
 		void execute_movement();

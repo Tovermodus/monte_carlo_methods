@@ -35,6 +35,7 @@ double Medium::calculate_energy() const
 	double ret = 0;
 	for(const std::shared_ptr<Cell>& cell:cells)
 	{
+		int n_rods = cell->number_rods_in_patch();
 		for(int i = 0; i < cell->number_rods_in_cell(); ++i)
 		{
 			std::shared_ptr<Rod> r = cell->get_rod_in_cell(i);
@@ -47,7 +48,7 @@ double Medium::calculate_energy() const
 				return 1e100;
 			if(r->get_y() > parameters.height)
 				return 1e100;
-			for (int j = 0; j < cell->number_rods_in_patch(); ++j) {
+			for (int j = 0; j < n_rods; ++j) {
 
 				if(cell->get_rod_in_cell(i) == cell->get_rod_in_patch(j))
 					continue;
@@ -117,7 +118,7 @@ std::shared_ptr<Cell> Medium::get_cell_of_position(double x, double y) const
 }
 void Medium::initialize_cells()
 {
-	int N = 3;
+	int N = 30;
 	double width = parameters.width/N;
 	double height = parameters.height/N;
 	for(int i = 0; i <= N; i++){
@@ -175,6 +176,10 @@ Medium::Movement::Movement(const std::shared_ptr<Medium>  &m, const double time_
 
 	std::uniform_int_distribution<> cell_distrib(0, m->cells.size()-1);
 	changed_cell_index = cell_distrib(rng);
+	if(m->cells[changed_cell_index]->number_rods_in_cell() == 0){
+		nothing_to_move = true;
+		return;
+	}
 	std::uniform_int_distribution<> rod_distrib(0, m->cells[changed_cell_index]->number_rods_in_cell()-1);
 	changed_rod_index_in_cell = rod_distrib(rng);
 	rod_changes_cell = false;
@@ -195,12 +200,16 @@ Medium::Movement::Movement(const std::shared_ptr<Medium>  &m, const double time_
 }
 void Medium::Movement::execute_movement()
 {
+	if(nothing_to_move)
+		return;
 	rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
 	if(rod_changes_cell)
 		new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
 }
 void Medium::Movement::reverse_movement()
 {
+	if(nothing_to_move)
+		return;
 	changed_rod->reverse_move_rod(parallel_movement,perpendicular_movement,rotation_movement);
 	changed_rod->move_to_cell(changed_cell);
 }
