@@ -6,30 +6,30 @@
 #include <iostream>
 #include <fstream>
 
-MonteCarloLoop::MonteCarloLoop(const MediumParameters & parameters,std::mt19937 rng, const double & time_step) : time_step(time_step), m(parameters,rng)
+MonteCarloLoop::MonteCarloLoop(const MediumParameters & parameters,std::mt19937 rng, const double & time_step) : time_step(time_step)
 {
+	m = std::make_shared<Medium>(parameters,rng);
 	uniform_distribution = std::uniform_real_distribution<double>(0.0,1.0);
 	time = 0.;
 
 }
 void MonteCarloLoop::monte_carlo_step()
 {
-	TrialMedium tm = m.get_trial_medium();
-	tm.random_movement(time_step, rng);
+	Medium::Movement mov(m, time_step, rng);
 	double ran = uniform_distribution(rng);
-	if (ran < acceptance_probability(tm)) {
-		m.update(tm);
+	if (ran < acceptance_probability(mov)) {
+		mov.execute_movement();
 		time += time_step;
 	}
 }
-double MonteCarloLoop::acceptance_probability(const TrialMedium& tm) const
+double MonteCarloLoop::acceptance_probability(Medium::Movement mov) const
 {
-	double delta_energy = tm.calculate_energy() - m.calculate_energy();
-	std::cout <<tm.calculate_energy() << " " << m.calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m.parameters.boltz * m.parameters.temperature)))<<"\n";
-	return 	std::min(1., std::exp(-delta_energy / (m.parameters.boltz * m.parameters.temperature)));
+	double delta_energy = mov.calculate_energy_after_movement() - m->calculate_energy();
+	std::cout << mov.calculate_energy_after_movement() << " " << m->calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)))<<"\n";
+	return 	std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)));
 }
-std::ostream &operator<<(std::ostream &os, Medium const &m) {
-	os << m.to_string();
+std::ostream &operator<<(std::ostream &os, const std::shared_ptr<Medium>& m) {
+	os << m->to_string();
 	return os;
 }
 void MonteCarloLoop::printToFile(const std::string& filename)

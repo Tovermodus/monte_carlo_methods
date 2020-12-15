@@ -10,11 +10,11 @@
 class MonteCarloLoop {
     private:
 	const double time_step;
-	Medium m;
+	std::shared_ptr<Medium> m;
 	double time;
 	std::mt19937 rng;
 	std::uniform_real_distribution<double> uniform_distribution;
-	double acceptance_probability(const TrialMedium& tm) const;
+	double acceptance_probability(Medium::Movement tm) const;
 
 
     public:

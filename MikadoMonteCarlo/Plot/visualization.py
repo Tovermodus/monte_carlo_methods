@@ -78,7 +78,7 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(1000/20)):
+    for i in range(int(500/5)):
         if frame_active == False:
             break
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")

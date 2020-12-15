@@ -7,18 +7,25 @@
 Medium::Medium (const MediumParameters& params,std::mt19937 & rng):parameters(params)
 
 {
+	initialize_cells();
 	initialize_rods(rng);
 }
 void Medium::initialize_rods(std::mt19937 & rng)
 {
-	rods = std::vector<Rod>();
 	int iterations = 0;
 	int total_number_of_rods = (int)(parameters.rods_per_volume*parameters.width*parameters.height);
-	while(rods.size() < total_number_of_rods && iterations < parameters.rod_placing_max_iterations)
+	int rod_number = 0;
+	while(rod_number < total_number_of_rods && iterations < parameters.rod_placing_max_iterations)
 	{
-		Rod new_rod = create_random_rod(rng);
-		if(rod_is_acceptable(new_rod)) {
-			rods.push_back(new_rod);
+		std::cout << rod_number << " " << total_number_of_rods<<"\n";
+		std::shared_ptr<Rod> new_rod = create_random_rod(rng);
+		std::shared_ptr<Cell> cell = get_cell_of_rod(new_rod);
+		cell->add_rod(new_rod);
+		if(!rod_is_acceptable(new_rod)) {
+			cell->remove_rod(new_rod);
+		}
+		else{
+			rod_number++;
 		}
 		iterations ++;
 	}
@@ -26,39 +33,60 @@ void Medium::initialize_rods(std::mt19937 & rng)
 double Medium::calculate_energy() const
 {
 	double ret = 0;
-	int rodnr = rods.size();
-	for (int i = 0; i < rodnr; ++i) {
-		ret += rods[i].get_y()*parameters.gravity;
-		for (int j = 0; j < rodnr; ++j) {
-
-			if (rods[i].check_collision(rods[j]) && i!=j) {
+	for(const std::shared_ptr<Cell>& cell:cells)
+	{
+		for(int i = 0; i < cell->number_rods_in_cell(); ++i)
+		{
+			std::shared_ptr<Rod> r = cell->get_rod_in_cell(i);
+			ret += r->get_y()*parameters.gravity;
+			if(r->get_y() - std::abs(std::sin(r->get_angle())*parameters.rod_length)< 0)
 				return 1e100;
+			if(r->get_x() - std::abs(std::cos(r->get_angle())*parameters.rod_length)< 0)
+				return 1e100;
+			if(r->get_x() + std::abs(std::cos(r->get_angle())*parameters.rod_length)> parameters.width)
+				return 1e100;
+			if(r->get_y() > parameters.height)
+				return 1e100;
+			for (int j = 0; j < cell->number_rods_in_patch(); ++j) {
+
+				if(cell->get_rod_in_cell(i) == cell->get_rod_in_patch(j))
+					continue;
+				if (cell->get_rod_in_cell(i)->check_collision(cell->get_rod_in_patch(j))) {
+					return 1e100;
+				}
 			}
 		}
 	}
 	return ret;
 }
-TrialMedium Medium::get_trial_medium()
+bool Medium::rod_is_acceptable(const std::shared_ptr<Rod>& rod)
 {
-	return TrialMedium(parameters, rods);
-}
-void Medium::update(const TrialMedium& trial_medium)
-{
-	rods[trial_medium.get_changed_rod_index()] = trial_medium.get_changed_rod();
-}
-bool Medium::rod_is_acceptable(const Rod & rod)
-{
-	for(const Rod& r:rods)
-		if(r.check_collision(rod))
+	if(rod->get_y() - std::abs(std::sin(rod->get_angle())*parameters.rod_length)< 0)
+		return false;
+	if(rod->get_x() - std::abs(std::cos(rod->get_angle())*parameters.rod_length)< 0)
+		return false;
+	if(rod->get_x() + std::abs(std::cos(rod->get_angle())*parameters.rod_length)> parameters.width)
+		return false;
+	if(rod->get_y() > parameters.height)
+		return false;
+	for (int i = 0; i < rod->get_cell()->number_rods_in_patch(); i++) {
+		if(rod->get_cell()->get_rod_in_patch(i) == rod)
+			continue;
+		if (rod->get_cell()->get_rod_in_patch(i)->check_collision(rod)) {
 			return false;
+		}
+	}
 	return true;
 }
-Rod Medium::create_random_rod(std::mt19937 & rng) const
+std::shared_ptr<Rod> Medium::create_random_rod(std::mt19937 & rng) const
 {
 	std::uniform_real_distribution<> x_distrib(0, parameters.width);
 	std::uniform_real_distribution<> y_distrib(0, parameters.height);
 	std::uniform_real_distribution<> angle_distrib(0, M_PI);
-	return Rod(x_distrib(rng), y_distrib(rng), angle_distrib(rng), parameters.rod_width, parameters.rod_length);
+	double x = x_distrib(rng);
+	double y = y_distrib(rng);
+	std::shared_ptr<Cell> cell = get_cell_of_position(x,y);
+	return std::make_shared<Rod>(x,y, angle_distrib(rng), parameters.rod_width, parameters.rod_length, cell);
 }
 std::string Medium::to_string() const
 {
@@ -67,51 +95,112 @@ std::string Medium::to_string() const
 	ret << std::scientific << parameters.height << "\n";
 	ret << std::scientific << parameters.rod_width << " ";
 	ret << std::scientific << parameters.rod_length << "\n";
-	for(const Rod& r: rods){
-		ret << std::scientific << r.get_x() << " ";
-		ret << std::scientific << r.get_y() << " ";
-		ret << std::scientific << r.get_angle() << "\n";
+	for (const std::shared_ptr<Cell> &c : cells) {
+		for (int i = 0; i < c->number_rods_in_cell(); i++) {
+			ret << std::scientific << c->get_rod_in_cell(i)->get_x() << " ";
+			ret << std::scientific << c->get_rod_in_cell(i)->get_y() << " ";
+			ret << std::scientific << c->get_rod_in_cell(i)->get_angle() << "\n";
+		}
 	}
 	return ret.str();
 }
-TrialMedium::TrialMedium(const MediumParameters &params, std::vector<Rod> &previous_rods) : parameters(&params)
+std::shared_ptr<Cell> Medium::get_cell_of_rod(const std::shared_ptr<Rod> &rod) const
 {
-	rods = std::vector<std::reference_wrapper<Rod>>(previous_rods.begin(),previous_rods.end());
-	changed_rod_index = -1;
+	return get_cell_of_position(rod->get_x(), rod->get_y());
 }
-void TrialMedium::random_movement(const double &time_step, std::mt19937 & rng)
+std::shared_ptr<Cell> Medium::get_cell_of_position(double x, double y) const
 {
-	std::uniform_int_distribution<> distrib(0, rods.size()-1);
-	changed_rod_index = distrib(rng);
-	Rod new_rod = move_random(rods[changed_rod_index],time_step,rng);
-	changed_rod = std::make_shared<Rod>(new_rod);
+	for(std::shared_ptr<Cell> c:cells)
+		if(c->check_if_position_in_cell(x,y))
+			return c;
+	return nullptr;
 }
-double TrialMedium::calculate_energy() const
+void Medium::initialize_cells()
 {
-	double ret = 0;
-	int rodnr = rods.size();
-	for (int i = 0; i < rodnr; ++i) {
-		ret += get_rod(i).get_y()*parameters->gravity;
-		for (int j = 0; j < rodnr; ++j) {
-			if (get_rod(i).check_collision(get_rod(j)) && i!=j) {
-				return 1e100;
-			}
+	int N = 3;
+	double width = parameters.width/N;
+	double height = parameters.height/N;
+	for(int i = 0; i <= N; i++){
+		for(int j = 0; j <= N; j++){
+			cells.push_back(std::make_shared<Cell>(i*width,j*height,width,height));
 		}
 	}
+	for(const std::shared_ptr<Cell>& c:cells)
+	{
+		std::vector<std::shared_ptr<Cell>> neighbours = get_neighbours_of_cell(c);
+		c->add_neighbours(neighbours);
+	}
+
+}
+std::vector<std::shared_ptr<Cell>> Medium::get_neighbours_of_cell(const std::shared_ptr<Cell> &cell) const
+{
+	std::vector<std::shared_ptr<Cell>>ret;
+	std::shared_ptr<Cell> upper_neighbour = get_cell_of_position(cell->get_center_x(),cell->get_center_y() + cell->get_height());
+	if(upper_neighbour != nullptr)
+		ret.push_back(upper_neighbour);
+	std::shared_ptr<Cell> lower_neighbour = get_cell_of_position(cell->get_center_x(),cell->get_center_y()-cell->get_height());
+	if(lower_neighbour != nullptr)
+		ret.push_back(lower_neighbour);
+	std::shared_ptr<Cell> left_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y());
+	if(left_neighbour != nullptr)
+		ret.push_back(left_neighbour);
+	std::shared_ptr<Cell> right_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y());
+	if(right_neighbour != nullptr)
+		ret.push_back(right_neighbour);
+	std::shared_ptr<Cell> topleft_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y()+cell->get_height());
+	if(topleft_neighbour != nullptr)
+		ret.push_back(topleft_neighbour);
+	std::shared_ptr<Cell> topright_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y()+cell->get_height());
+	if(topright_neighbour != nullptr)
+		ret.push_back(topright_neighbour);
+	std::shared_ptr<Cell> lowleft_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y()-cell->get_height());
+	if(lowleft_neighbour != nullptr)
+		ret.push_back(lowleft_neighbour);
+	std::shared_ptr<Cell> lowright_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y()-cell->get_height());
+	if(lowright_neighbour != nullptr)
+		ret.push_back(lowright_neighbour);
 	return ret;
 }
-Rod TrialMedium::move_random(const Rod & r, const double &time_step, std::mt19937 & rng) const
+
+double Medium::Movement::calculate_energy_after_movement()
 {
-	double amplitude_parallel = std::sqrt(2*parameters->diffusion_coefficient_parallel*time_step);
-	double amplitude_perpendicular = std::sqrt(2*parameters->diffusion_coefficient_perpendicular*time_step);
-	double amplitude_rotation = std::sqrt(2*parameters->diffusion_coefficient_rotation*time_step);
+	execute_movement();
+	double ret = m->calculate_energy();
+	reverse_movement();
+	return ret;
+}
+
+Medium::Movement::Movement(const std::shared_ptr<Medium>  &m, const double time_step, std::mt19937 &rng):m(m)
+{
+
+	std::uniform_int_distribution<> cell_distrib(0, m->cells.size()-1);
+	changed_cell_index = cell_distrib(rng);
+	std::uniform_int_distribution<> rod_distrib(0, m->cells[changed_cell_index]->number_rods_in_cell()-1);
+	changed_rod_index_in_cell = rod_distrib(rng);
+	rod_changes_cell = false;
+	new_cell_index = changed_cell_index;
+	changed_cell = m->cells[changed_cell_index];
+	changed_rod = changed_cell->get_rod_in_cell(changed_rod_index_in_cell);
+	new_cell = changed_cell;
+
+	double amplitude_parallel = std::sqrt(2*m->parameters.diffusion_coefficient_parallel*time_step);
+	double amplitude_perpendicular = std::sqrt(2*m->parameters.diffusion_coefficient_perpendicular*time_step);
+	double amplitude_rotation = std::sqrt(2*m->parameters.diffusion_coefficient_rotation*time_step);
 	std::uniform_real_distribution<> parallel_distrib(-amplitude_parallel, amplitude_parallel);
 	std::uniform_real_distribution<> perpendicular_distrib(-amplitude_perpendicular, amplitude_perpendicular);
 	std::uniform_real_distribution<> rotation_distrib(-amplitude_rotation, amplitude_rotation);
-	double parallel_movement = parallel_distrib(rng);
-	double perpendicular_movement = perpendicular_distrib(rng);
-	double rotation_movement = rotation_distrib(rng);
-	return r.generate_moved_rod(parallel_movement,perpendicular_movement,rotation_movement);
-
-
+	parallel_movement = parallel_distrib(rng);
+	perpendicular_movement = perpendicular_distrib(rng);
+	rotation_movement = rotation_distrib(rng);
+}
+void Medium::Movement::execute_movement()
+{
+	rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
+	if(rod_changes_cell)
+		new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
+}
+void Medium::Movement::reverse_movement()
+{
+	changed_rod->reverse_move_rod(parallel_movement,perpendicular_movement,rotation_movement);
+	changed_rod->move_to_cell(changed_cell);
 }
