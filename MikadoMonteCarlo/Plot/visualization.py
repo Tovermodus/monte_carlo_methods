@@ -1,5 +1,6 @@
 import pygame
 import numpy as np
+import matplotlib.pyplot as plt
 frame_active = True
 
 pygame.init()
@@ -9,6 +10,21 @@ pix_h = 1000
 screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Data Visualisation")
+open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'w').close()
+runthrough=False
+
+def order_parameter(rods):
+    angles=np.array([r.phi for r in rods])
+    return np.mean(2*np.cos(angles)**2-1)
+
+def plot_order():
+    with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'r') as f:
+        order_p=np.array(f.readlines(), dtype=float)
+        plt.plot(order_p)
+        plt.title(r'Order parameter $S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$')
+        plt.xlabel('timesteps/20')
+        plt.ylabel('order parameter')
+        plt.savefig("../cmake-build-debug/PlotFiles/order_parameter.png")
 
 def plot_file(name):
     global frame_active
@@ -29,6 +45,9 @@ def plot_file(name):
         #print(x,y,phi)
         rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
 
+    if not runthrough:
+        with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'a') as f:
+            f.write(str(order_parameter(rods))+"\n")
 
 
     for event in pygame.event.get():
@@ -82,3 +101,9 @@ while frame_active:
         if frame_active == False:
             break
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
+
+    if not  runthrough:
+        plot_order()
+    runthrough=True
+    #if runthrough==0:
+    #    runthrough=1
