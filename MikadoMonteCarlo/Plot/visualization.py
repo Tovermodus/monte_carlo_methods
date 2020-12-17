@@ -57,7 +57,7 @@ def plot_file(name):
     for rod in rods:
         rod.draw()
     pygame.display.flip()
-    clock.tick(20)
+    clock.tick(60)
 
 
 
@@ -97,7 +97,7 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(1000/20)):
+    for i in range(int(20000/50)):
         if frame_active == False:
             break
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")

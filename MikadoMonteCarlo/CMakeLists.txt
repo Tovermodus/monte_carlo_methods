@@ -3,7 +3,7 @@ project(MikadoMonteCarlo)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(MikadoMonteCarlo main.cpp Rod.cpp Rod.h Medium.cpp Medium.h MediumParameters.h MonteCarloLoop.cpp MonteCarloLoop.h math_functions.h)
+add_executable(MikadoMonteCarlo main.cpp Rod.cpp Rod.h Cell.cpp Cell.h Medium.cpp Medium.h MediumParameters.h MonteCarloLoop.cpp MonteCarloLoop.h math_functions.h)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
