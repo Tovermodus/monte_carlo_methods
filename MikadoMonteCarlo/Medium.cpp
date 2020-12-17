@@ -33,24 +33,23 @@ void Medium::initialize_rods(std::mt19937 & rng)
 double Medium::calculate_energy() const
 {
 	double ret = 0;
-	for(const std::shared_ptr<Cell>& cell:cells)
-	{
+	double rod_mass_difference = parameters.rod_length * parameters.rod_width * parameters.rod_width *
+				     (parameters.rod_density - parameters.density);
+	for (const std::shared_ptr<Cell> &cell : cells) {
 		int n_rods = cell->number_rods_in_patch();
-		for(int i = 0; i < cell->number_rods_in_cell(); ++i)
-		{
+		for (int i = 0; i < cell->number_rods_in_cell(); ++i) {
 			std::shared_ptr<Rod> r = cell->get_rod_in_cell(i);
-			ret += r->get_y()*parameters.gravity;
-			if(r->get_y() - std::abs(std::sin(r->get_angle())*parameters.rod_length)< 0)
+			ret += r->get_y() * parameters.gravity*rod_mass_difference;
+			if (r->get_y() - std::abs(std::sin(r->get_angle()) * parameters.rod_length) < 0)
 				return 1e100;
-			if(r->get_x() - std::abs(std::cos(r->get_angle())*parameters.rod_length)< 0)
+			if (r->get_x() - std::abs(std::cos(r->get_angle()) * parameters.rod_length) < 0)
 				return 1e100;
-			if(r->get_x() + std::abs(std::cos(r->get_angle())*parameters.rod_length)> parameters.width)
+			if (r->get_x() + std::abs(std::cos(r->get_angle()) * parameters.rod_length) > parameters.width)
 				return 1e100;
-			if(r->get_y() > parameters.height)
+			if (r->get_y() > parameters.height)
 				return 1e100;
 			for (int j = 0; j < n_rods; ++j) {
-
-				if(cell->get_rod_in_cell(i) == cell->get_rod_in_patch(j))
+				if (cell->get_rod_in_cell(i) == cell->get_rod_in_patch(j))
 					continue;
 				if (cell->get_rod_in_cell(i)->check_collision(cell->get_rod_in_patch(j))) {
 					return 1e100;
@@ -118,7 +117,7 @@ std::shared_ptr<Cell> Medium::get_cell_of_position(double x, double y) const
 }
 void Medium::initialize_cells()
 {
-	int N = 30;
+	int N = parameters.number_of_cells_per_direction;
 	double width = parameters.width/N;
 	double height = parameters.height/N;
 	for(int i = 0; i <= N; i++){

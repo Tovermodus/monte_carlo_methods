@@ -13,6 +13,8 @@ public:
 	double rod_density;
 	double aspect_ratio;
 
+	int number_of_cells_per_direction;
+
 	double rods_per_volume;
 	int rod_placing_max_iterations;
 
@@ -39,6 +41,7 @@ public:
 	MediumParameters(double rod_length,
 			 double rod_width,
 			 double rod_density,
+			 int number_of_cells_per_direction,
 			 double rods_per_volume,
 			 int rod_placing_max_iterations,
 			 double density,
@@ -51,6 +54,7 @@ public:
 		: rod_length(rod_length),
 		  rod_width(rod_width),
 		  rod_density(rod_density),
+		  number_of_cells_per_direction(number_of_cells_per_direction),
 		  rods_per_volume(rods_per_volume),
 		  rod_placing_max_iterations(rod_placing_max_iterations),
 		  density(density),
@@ -74,6 +78,7 @@ public:
 		: rod_length(params.rod_length),
 		  rod_width(params.rod_width),
 		  rod_density(params.rod_density),
+		  number_of_cells_per_direction(params.number_of_cells_per_direction),
 		  rods_per_volume(params.rods_per_volume),
 		  rod_placing_max_iterations(params.rod_placing_max_iterations),
 		  density(params.density),
@@ -89,7 +94,7 @@ public:
 		  end_correction_perpendicular(params.end_correction_perpendicular),
 		  aspect_ratio(rod_length/rod_width),
 		  friction_rotation(
-			  M_PI*viscosity*std::pow(rod_length, 3)/3*(std::log(aspect_ratio) + end_correction_rotation)),
+			  M_PI*viscosity*std::pow(rod_length, 3)/(3*(std::log(aspect_ratio) + end_correction_rotation))),
 		  friction_parallel(2*M_PI*viscosity*rod_length/(std::log(aspect_ratio) + end_correction_parallel)),
 		  friction_perpendicular(4*M_PI*viscosity*rod_length/(std::log(aspect_ratio) + end_correction_perpendicular)),
 		  diffusion_coefficient_rotation(boltz*temperature/friction_rotation),
