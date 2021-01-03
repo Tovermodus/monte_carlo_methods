@@ -17,7 +17,7 @@ void MonteCarloLoop::monte_carlo_step()
 {
 	Medium::Movement mov(m, time_step, rng);
 	double ran = uniform_distribution(rng);
-	if (ran < acceptance_probability(mov)) {
+	if (ran < acceptance_probability_single_movement(mov)) {
 		mov.execute_movement();
 		time += time_step;
 	}
@@ -25,7 +25,14 @@ void MonteCarloLoop::monte_carlo_step()
 double MonteCarloLoop::acceptance_probability(Medium::Movement mov) const
 {
 	double delta_energy = mov.calculate_energy_after_movement() - m->calculate_energy();
-	std::cout << mov.calculate_energy_after_movement() << " " << m->calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)))<<"\n";
+	//std::cout << mov.calculate_energy_after_movement() << " " << m->calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)))<<"\n";
+	return 	std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)));
+}
+double MonteCarloLoop::acceptance_probability_single_movement(Medium::Movement mov) const
+{
+	double delta_energy = mov.calculate_energy_after_movement_for_rod() - mov.calculate_energy_before_movement_for_rod();
+	//std::cout << mov.calculate_energy_after_movement_for_rod()  -  mov.calculate_energy_before_movement_for_rod() << " "
+	//	  <<  (mov.calculate_energy_after_movement() - m->calculate_energy()) <<"\n";
 	return 	std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)));
 }
 std::ostream &operator<<(std::ostream &os, const std::shared_ptr<Medium>& m) {

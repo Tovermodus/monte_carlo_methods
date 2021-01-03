@@ -49,9 +49,9 @@ double Medium::calculate_energy() const
 			if (r->get_y() > parameters.height)
 				return 1e100;
 			for (int j = 0; j < n_rods; ++j) {
-				if (cell->get_rod_in_cell(i) == cell->get_rod_in_patch(j))
+				if (r == cell->get_rod_in_patch(j))
 					continue;
-				if (cell->get_rod_in_cell(i)->check_collision(cell->get_rod_in_patch(j))) {
+				if (r->check_collision(cell->get_rod_in_patch(j))) {
 					return 1e100;
 				}
 			}
@@ -59,7 +59,7 @@ double Medium::calculate_energy() const
 	}
 	return ret;
 }
-bool Medium::rod_is_acceptable(const std::shared_ptr<Rod>& rod)
+bool Medium::rod_is_acceptable(const std::shared_ptr<Rod>& rod) const
 {
 	if(rod->get_y() - std::abs(std::sin(rod->get_angle())*parameters.rod_length)< 0)
 		return false;
@@ -161,6 +161,30 @@ std::vector<std::shared_ptr<Cell>> Medium::get_neighbours_of_cell(const std::sha
 		ret.push_back(lowright_neighbour);
 	return ret;
 }
+double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
+{
+	double ret = 0;
+	double rod_mass_difference = parameters.rod_length * parameters.rod_width * parameters.rod_width *
+		(parameters.rod_density - parameters.density);
+	std::shared_ptr<Cell> cell_of_rod = rod->get_cell();
+	ret += rod->get_y() * parameters.gravity*rod_mass_difference;
+	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
+		return 1e100;
+	if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
+		return 1e100;
+	if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
+		return 1e100;
+	if (rod->get_y() > parameters.height)
+		return 1e100;
+	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
+		if (rod == cell_of_rod->get_rod_in_patch(j))
+			continue;
+		if (rod->check_collision(cell_of_rod->get_rod_in_patch(j))) {
+			return 1e100;
+		}
+	}
+	return ret;
+}
 
 double Medium::Movement::calculate_energy_after_movement()
 {
@@ -201,14 +225,37 @@ void Medium::Movement::execute_movement()
 {
 	if(nothing_to_move)
 		return;
-	rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
-	if(rod_changes_cell)
-		new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
+	if(!moved) {
+		rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
+		if (rod_changes_cell)
+			new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
+	}
+	moved = true;
 }
 void Medium::Movement::reverse_movement()
 {
 	if(nothing_to_move)
 		return;
-	changed_rod->reverse_move_rod(parallel_movement,perpendicular_movement,rotation_movement);
-	changed_rod->move_to_cell(changed_cell);
+	if(moved) {
+		changed_rod->reverse_move_rod(parallel_movement, perpendicular_movement, rotation_movement);
+		changed_rod->move_to_cell(changed_cell);
+	}
+	moved = false;
+}
+double Medium::Movement::calculate_energy_after_movement_for_rod()
+{
+	if(nothing_to_move)
+		return 0;
+	bool moved_before_manipulation = moved;
+		execute_movement();
+	double ret = m->calculate_energy_for_rod(changed_rod);
+		reverse_movement();
+	return ret;
+}
+double Medium::Movement::calculate_energy_before_movement_for_rod()
+{
+	if(nothing_to_move)
+		return 0;
+	double ret = m->calculate_energy_for_rod(changed_rod);
+	return ret;
 }

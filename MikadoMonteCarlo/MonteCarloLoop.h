@@ -15,6 +15,7 @@ class MonteCarloLoop {
 	std::mt19937 rng;
 	std::uniform_real_distribution<double> uniform_distribution;
 	double acceptance_probability(Medium::Movement tm) const;
+	double acceptance_probability_single_movement(Medium::Movement mov) const;
 
 
     public:

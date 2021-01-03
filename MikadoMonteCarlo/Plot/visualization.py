@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,8 +9,7 @@ pygame.init()
 
 pix_w = 1000# (pix_w - 100)/(pix_h - 100) must be equal to w/h from real domain
 pix_h = 1000
-timestep_delta = 50
-timesteps = 60000
+timesteps = int(sys.argv[1])
 screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Data Visualisation")
@@ -24,7 +25,7 @@ def plot_order():
         order_p=np.array(f.readlines(), dtype=float)
         plt.plot(order_p)
         plt.title(r'Order parameter $S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$')
-        plt.xlabel('timesteps/'+str(timestep_delta))
+        plt.xlabel('timesteps')
         plt.ylabel('order parameter')
         plt.savefig("../cmake-build-debug/PlotFiles/order_parameter.png")
         plt.show()
@@ -61,7 +62,7 @@ def plot_file(name):
     for rod in rods:
         rod.draw()
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(100)
     f.close()
 
 
@@ -102,7 +103,7 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(timesteps/timestep_delta)):
+    for i in range(int(timesteps)):
         if frame_active == False:
             break
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
