@@ -2,11 +2,12 @@
 
 int main ()
 {
-	double scale = 5e-5;
+	double scale = 5e-4;
 	MediumParameters params(0.05*scale,
-				0.001*scale,IRON_DENSITY,
+				0.001*scale,
+				IRON_DENSITY,
 				15,
-				1000/scale/scale,
+				300/scale/scale,
 				5000,
 				WATER_DENSITY,
 				WATER_VISCOSITY,
@@ -22,7 +23,7 @@ int main ()
 	MonteCarloLoop loop(params,rng, params.estimate_time_step());
 	int plotn = 0;
 	system("mkdir PlotFiles");
-	double iterations = 1e7;
+	double iterations = 5e6;
 	int plot_interval = 5000;
 	for(double i = 0; i < iterations; ++i) {
 		if((int)i%plot_interval == 0) {

@@ -197,7 +197,7 @@ double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
 	ret += rod->get_y() * parameters.gravity*rod_mass_difference;
 	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
 		return 1e100;
-	if (rod->get_y() > parameters.height)
+	if (rod->get_y() + std::abs(std::sin(rod->get_angle()) * parameters.rod_length)> parameters.height)
 		return 1e100;
 	if(!parameters.periodic_boundary_conditions) {
 		if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
