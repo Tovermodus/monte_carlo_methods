@@ -3,25 +3,46 @@
 //
 
 #include "MonteCarloLoop.h"
-MonteCarloLoop::MonteCarloLoop(const MediumParameters & parameters, const double & time_step) : time_step(time_step), m(Medium(parameters))
+#include <iostream>
+#include <fstream>
+
+MonteCarloLoop::MonteCarloLoop(const MediumParameters & parameters,std::mt19937 rng, const double & time_step) : time_step(time_step)
 {
-	std::random_device rd;  //Will be used to obtain a seed for the random number engine
-	rng = std::mt19937(rd());
+	m = std::make_shared<Medium>(parameters,rng);
 	uniform_distribution = std::uniform_real_distribution<double>(0.0,1.0);
 	time = 0.;
 
 }
 void MonteCarloLoop::monte_carlo_step()
 {
-	TrialMedium tm = m.get_trial_medium();
-	tm.random_movement(time_step, rng);
-	if (uniform_distribution(rng) < acceptance_probability(tm)) {
-		m.update(tm);
+	Medium::Movement mov(m, time_step, rng);
+	double ran = uniform_distribution(rng);
+	if (ran < acceptance_probability_single_movement(mov)) {
+		mov.execute_movement();
 		time += time_step;
 	}
 }
-double MonteCarloLoop::acceptance_probability(TrialMedium tm) const
+double MonteCarloLoop::acceptance_probability(Medium::Movement mov) const
 {
-	double delta_energy = tm.calculate_energy() - m.calculate_energy();
-	return 	std::min(1., std::exp(-delta_energy / (m.parameters.boltz * m.parameters.temperature)));
+	double delta_energy = mov.calculate_energy_after_movement() - m->calculate_energy();
+	//std::cout << mov.calculate_energy_after_movement() << " " << m->calculate_energy() <<" " <<  delta_energy <<"  "<<std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)))<<"\n";
+	return 	std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)));
+}
+double MonteCarloLoop::acceptance_probability_single_movement(Medium::Movement mov) const
+{
+	double delta_energy = mov.calculate_energy_after_movement_for_rod() - mov.calculate_energy_before_movement_for_rod();
+	//std::cout << mov.calculate_energy_after_movement_for_rod()  -  mov.calculate_energy_before_movement_for_rod() << " "
+	//	  <<  (mov.calculate_energy_after_movement() - m->calculate_energy()) <<"\n";
+	return 	std::min(1., std::exp(-delta_energy / (m->parameters.boltz * m->parameters.temperature)));
+}
+std::ostream &operator<<(std::ostream &os, const std::shared_ptr<Medium>& m) {
+	os << m->to_string();
+	return os;
+}
+void MonteCarloLoop::printToFile(const std::string& filename)
+{
+	std::ofstream out_file;
+	out_file.open(filename);
+	out_file << m;
+	out_file.close();
 }
