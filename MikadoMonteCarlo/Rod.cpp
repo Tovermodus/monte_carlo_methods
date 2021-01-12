@@ -128,3 +128,14 @@ bool Rod::reverse_move_rod(double parallel_movement, double perpendicular_moveme
 	move_y(-perpendicular_movement*std::sin(phi+M_PI));
 	return cell->check_if_rod_in_cell(shared_from_this());
 }
+void Rod::apply_periodic_boundary_conditions(double medium_width, double medium_height)
+{
+	while (x < 0)
+		x += medium_width;
+	while (x > medium_width)
+		x -= medium_width;
+	while (y<0)
+		y+= medium_height;
+	while (y>medium_height)
+		y-=medium_height;
+}

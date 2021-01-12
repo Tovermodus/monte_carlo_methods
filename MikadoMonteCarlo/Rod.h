@@ -49,6 +49,7 @@ public:
 	std::shared_ptr<Cell> get_cell() const;
 	bool move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
 	bool reverse_move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
+	void apply_periodic_boundary_conditions(double medium_width, double medium_height);
 };
 
 #endif //_ROD_H_

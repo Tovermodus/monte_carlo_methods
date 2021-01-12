@@ -43,6 +43,7 @@ class Cell : public std::enable_shared_from_this<Cell>{
 	double get_center_x() const;
 	double get_center_y() const;
 	void add_neighbours(const std::vector<std::shared_ptr<Cell>> & neighbours);
+	std::string to_string();
 };
 
 #endif //MIKADOMONTECARLO__CELL_H_

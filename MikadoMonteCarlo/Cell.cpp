@@ -4,6 +4,7 @@
 
 #include "Cell.h"
 #include <cassert>
+#include <sstream>
 std::size_t Cell::number_rods_in_patch() const
 {
 	std::size_t number = number_rods_in_cell();
@@ -62,6 +63,20 @@ bool Cell::remove_rod(const std::shared_ptr<Rod>& rod)
 	}
 	return false;
 }
+std::string Cell::to_string()
+{
+	std::ostringstream ret;
+	ret << "[";
+	ret << std::scientific << get_center_x() - width/2;
+	ret << ",";
+	ret << std::scientific << get_center_x() + width/2;
+	ret << "]x[";
+	ret << std::scientific << get_center_y() - height/2;
+	ret << ",";
+	ret << std::scientific << get_center_y() + height/2;
+	ret << "]";
+	return ret.str();
+}
 std::shared_ptr<Cell> Cell::move_rod_to_neighbour(const std::shared_ptr<Rod> &rod)
 {
 	for(const std::shared_ptr<Cell>& neighbour:neighbour_cells)
@@ -72,7 +87,11 @@ std::shared_ptr<Cell> Cell::move_rod_to_neighbour(const std::shared_ptr<Rod> &ro
 			return neighbour;
 		}
 	}
-	std::cout << rod->get_x()<<" " << rod->get_y()<< "\n";
+
+	std::cout <<"rod: "<< rod->get_x()<<" " << rod->get_y()<< "    cell: "<<to_string() <<"\n";
+	for(const std::shared_ptr<Cell>& neighbour:neighbour_cells)
+		std::cout << neighbour->to_string() <<"\n";
+	std::cout <<"\n\n";
 	throw std::range_error("not moved to a neighbour cell, maybe move too large?");
 }
 bool Cell::rod_in_cell_equals_rod_in_patch(std::size_t cell_index, std::size_t patch_index) const

@@ -54,8 +54,11 @@ class Medium {
 		double calculate_energy_after_movement();
 		double calculate_energy_after_movement_for_rod();
 		double calculate_energy_before_movement_for_rod();
+		void apply_periodic_boundary_conditions_x();
 	};
 
+	std::shared_ptr<Cell> get_cell_in_direction(const std::shared_ptr<Cell> &cell, int x_direction,
+						    int y_direction) const;
 };
 
 

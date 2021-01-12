@@ -2,24 +2,36 @@
 
 int main ()
 {
-	double scale = 2e-6;
-	MediumParameters params(0.06*scale,0.003*scale,7874,25,300/scale/scale,5000,1000,1000,true,1*scale,1*scale,1000000,300);
-	std::cout <<params.diffusion_coefficient_parallel << "\n";
+	double scale = 5e-5;
+	MediumParameters params(0.05*scale,
+				0.001*scale,IRON_DENSITY,
+				15,
+				1000/scale/scale,
+				5000,
+				WATER_DENSITY,
+				WATER_VISCOSITY,
+				true,
+				1*scale,
+				1*scale,
+				EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
+
+	std::cout <<params.estimate_time_step() << "\n";
 	std::random_device rd;  //Will be used to obtain a seed for the random number engine
 	std::mt19937 rng = std::mt19937(rd());
-	MonteCarloLoop loop(params,rng, 1e-1);
+	MonteCarloLoop loop(params,rng, params.estimate_time_step());
 	int plotn = 0;
 	system("mkdir PlotFiles");
-	int iterations = 100000000;
+	double iterations = 1e7;
 	int plot_interval = 5000;
-	for(int i = 0; i < iterations; ++i) {
-		if(i%plot_interval == 0) {
+	for(double i = 0; i < iterations; ++i) {
+		if((int)i%plot_interval == 0) {
 			loop.printToFile("PlotFiles/" + std::to_string(plotn++) + ".txt");
-			std::cout << i << "\n";
+			std::cout << std::scientific << i << "\n";
 		}
 		loop.monte_carlo_step();
 	}
-	std::string command ="python3 ../Plot/visualization.py " + std::to_string(iterations/plot_interval);
+	std::string command ="python3 ../Plot/visualization.py " + std::to_string((int)(iterations/plot_interval));
 	system(command.c_str());
 	return 0;
 }

@@ -17,7 +17,6 @@ void Medium::initialize_rods(std::mt19937 & rng)
 	int rod_number = 0;
 	while(rod_number < total_number_of_rods && iterations < parameters.rod_placing_max_iterations)
 	{
-		std::cout << rod_number << " " << total_number_of_rods<<"\n";
 		std::shared_ptr<Rod> new_rod = create_random_rod(rng);
 		std::shared_ptr<Cell> cell = get_cell_of_rod(new_rod);
 		cell->add_rod(new_rod);
@@ -29,6 +28,7 @@ void Medium::initialize_rods(std::mt19937 & rng)
 		}
 		iterations ++;
 	}
+	std::cout << rod_number << "rods placed\n";
 }
 double Medium::calculate_energy() const
 {
@@ -42,12 +42,15 @@ double Medium::calculate_energy() const
 			ret += r->get_y() * parameters.gravity*rod_mass_difference;
 			if (r->get_y() - std::abs(std::sin(r->get_angle()) * parameters.rod_length) < 0)
 				return 1e100;
-			if (r->get_x() - std::abs(std::cos(r->get_angle()) * parameters.rod_length) < 0)
-				return 1e100;
-			if (r->get_x() + std::abs(std::cos(r->get_angle()) * parameters.rod_length) > parameters.width)
-				return 1e100;
 			if (r->get_y() > parameters.height)
 				return 1e100;
+			if(!parameters.periodic_boundary_conditions) {
+				if (r->get_x() - std::abs(std::cos(r->get_angle()) * parameters.rod_length) < 0)
+					return 1e100;
+				if (r->get_x() + std::abs(std::cos(r->get_angle()) * parameters.rod_length) >
+				    parameters.width)
+					return 1e100;
+			}
 			for (int j = 0; j < n_rods; ++j) {
 				if (r == cell->get_rod_in_patch(j))
 					continue;
@@ -118,47 +121,71 @@ std::shared_ptr<Cell> Medium::get_cell_of_position(double x, double y) const
 void Medium::initialize_cells()
 {
 	int N = parameters.number_of_cells_per_direction;
-	double width = parameters.width/N;
-	double height = parameters.height/N;
-	for(int i = 0; i <= N; i++){
-		for(int j = 0; j <= N; j++){
-			cells.push_back(std::make_shared<Cell>(i*width,j*height,width,height));
+	double width = parameters.width / N;
+	double height = parameters.height / N;
+	if (parameters.periodic_boundary_conditions) {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				cells.push_back(std::make_shared<Cell>(i * width + width/2, j * height + height/2, width, height));
+			}
+		}
+	} else {
+		for (int i = 0; i <= N; i++) {
+			for (int j = 0; j <= N; j++) {
+				cells.push_back(std::make_shared<Cell>(i * width, j * height, width, height));
+			}
 		}
 	}
-	for(const std::shared_ptr<Cell>& c:cells)
-	{
+	for (const std::shared_ptr<Cell> &c : cells) {
 		std::vector<std::shared_ptr<Cell>> neighbours = get_neighbours_of_cell(c);
 		c->add_neighbours(neighbours);
 	}
+}
+std::shared_ptr<Cell> Medium::get_cell_in_direction(const std::shared_ptr<Cell> &cell, int x_direction, int y_direction) const
+{
+	double cell_x_pos = cell->get_center_x();
+	double cell_y_pos = cell->get_center_y();
+	if(x_direction>0)
+		cell_x_pos += cell->get_width();
+	if(x_direction<0)
+		cell_x_pos -= cell->get_width();
+	if(y_direction>0)
+		cell_y_pos += cell->get_height();
+	if(y_direction<0)
+		cell_y_pos -= cell->get_height();
 
+	while (cell_x_pos < 0)
+		cell_x_pos += parameters.width;
+	while (cell_x_pos > parameters.width)
+		cell_x_pos -= parameters.width;
+	while (cell_y_pos<0)
+		cell_y_pos+=  parameters.height;
+	while (cell_y_pos>parameters.height)
+		cell_y_pos-=parameters.height;
+	return get_cell_of_position(cell_x_pos, cell_y_pos);
 }
 std::vector<std::shared_ptr<Cell>> Medium::get_neighbours_of_cell(const std::shared_ptr<Cell> &cell) const
 {
 	std::vector<std::shared_ptr<Cell>>ret;
-	std::shared_ptr<Cell> upper_neighbour = get_cell_of_position(cell->get_center_x(),cell->get_center_y() + cell->get_height());
-	if(upper_neighbour != nullptr)
-		ret.push_back(upper_neighbour);
-	std::shared_ptr<Cell> lower_neighbour = get_cell_of_position(cell->get_center_x(),cell->get_center_y()-cell->get_height());
-	if(lower_neighbour != nullptr)
-		ret.push_back(lower_neighbour);
-	std::shared_ptr<Cell> left_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y());
-	if(left_neighbour != nullptr)
-		ret.push_back(left_neighbour);
-	std::shared_ptr<Cell> right_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y());
-	if(right_neighbour != nullptr)
-		ret.push_back(right_neighbour);
-	std::shared_ptr<Cell> topleft_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y()+cell->get_height());
-	if(topleft_neighbour != nullptr)
-		ret.push_back(topleft_neighbour);
-	std::shared_ptr<Cell> topright_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y()+cell->get_height());
-	if(topright_neighbour != nullptr)
-		ret.push_back(topright_neighbour);
-	std::shared_ptr<Cell> lowleft_neighbour = get_cell_of_position(cell->get_center_x()-cell->get_width(),cell->get_center_y()-cell->get_height());
-	if(lowleft_neighbour != nullptr)
-		ret.push_back(lowleft_neighbour);
-	std::shared_ptr<Cell> lowright_neighbour = get_cell_of_position(cell->get_center_x()+cell->get_width(),cell->get_center_y()-cell->get_height());
-	if(lowright_neighbour != nullptr)
-		ret.push_back(lowright_neighbour);
+	ret.push_back(get_cell_in_direction(cell,1,0));
+	ret.push_back(get_cell_in_direction(cell,-1,0));
+	ret.push_back(get_cell_in_direction(cell,0,1));
+	ret.push_back(get_cell_in_direction(cell,0,-1));
+	ret.push_back(get_cell_in_direction(cell,1,1));
+	ret.push_back(get_cell_in_direction(cell,1,-1));
+	ret.push_back(get_cell_in_direction(cell,-1,1));
+	ret.push_back(get_cell_in_direction(cell,-1,-1));
+	for(const auto& c:ret)
+		if(c == nullptr || ret.size() != 8)
+		{
+			std::cout << "this: " << cell->to_string()<<"\n";
+			for(const auto & n: ret)
+				if(n != nullptr)
+					std::cout << "neighbours: " << n->to_string()<<"\n";
+				else
+					std::cout << "neighbours: nullptr\n";
+			throw std::domain_error("something witht the domain went wrong");
+		}
 	return ret;
 }
 double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
@@ -170,12 +197,14 @@ double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
 	ret += rod->get_y() * parameters.gravity*rod_mass_difference;
 	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
 		return 1e100;
-	if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
-		return 1e100;
-	if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
-		return 1e100;
 	if (rod->get_y() > parameters.height)
 		return 1e100;
+	if(!parameters.periodic_boundary_conditions) {
+		if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
+			return 1e100;
+		if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
+			return 1e100;
+	}
 	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
 		if (rod == cell_of_rod->get_rod_in_patch(j))
 			continue;
@@ -221,12 +250,18 @@ Medium::Movement::Movement(const std::shared_ptr<Medium>  &m, const double time_
 	perpendicular_movement = perpendicular_distrib(rng);
 	rotation_movement = rotation_distrib(rng);
 }
+void Medium::Movement::apply_periodic_boundary_conditions_x()
+{
+	if(nothing_to_move)
+		return;
+}
 void Medium::Movement::execute_movement()
 {
 	if(nothing_to_move)
 		return;
 	if(!moved) {
 		rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
+		changed_rod->apply_periodic_boundary_conditions(m->parameters.width,m->parameters.height);
 		if (rod_changes_cell)
 			new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
 	}
@@ -238,6 +273,7 @@ void Medium::Movement::reverse_movement()
 		return;
 	if(moved) {
 		changed_rod->reverse_move_rod(parallel_movement, perpendicular_movement, rotation_movement);
+		changed_rod->apply_periodic_boundary_conditions(m->parameters.width,m->parameters.height);
 		changed_rod->move_to_cell(changed_cell);
 	}
 	moved = false;

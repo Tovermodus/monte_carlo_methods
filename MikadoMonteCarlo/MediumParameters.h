@@ -6,8 +6,18 @@
 #define _MEDIUMPARAMETERS_H_
 #include <cmath>
 
+const double WATER_DENSITY = 1000;
+const double IRON_DENSITY = 7874;
+const double LITHIUM_DENSITY = 534;
+const double HONEY_DENSITY = 1450;
+const double WATER_VISCOSITY = 0.001;
+const double HONEY_VISCOSITY = 10;
+const double EARTH_GRAVITY = 9.81;
+const double ROOM_TEMPERATURE = 293;
+
 class MediumParameters {
 public:
+
 	double rod_length;
 	double rod_width;
 	double rod_density;
@@ -101,6 +111,11 @@ public:
 		  diffusion_coefficient_parallel(boltz*temperature/friction_parallel),
 		  diffusion_coefficient_perpendicular(boltz*temperature/friction_perpendicular)
 	{}
-
+	double estimate_time_step()
+	{
+		double cell_size = width/number_of_cells_per_direction;
+		double safety_coefficient = 0.1;
+		return safety_coefficient*cell_size*cell_size/2*std::min(1./diffusion_coefficient_parallel, 1./diffusion_coefficient_perpendicular);
+	}
 };
 #endif //_MEDIUMPARAMETERS_H_
