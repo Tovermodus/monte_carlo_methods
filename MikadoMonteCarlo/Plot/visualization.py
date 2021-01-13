@@ -1,6 +1,8 @@
 import pygame
 import numpy as np
 import sys
+import re
+from tkinter import Tk
 from tkinter.filedialog import askdirectory
 
 frame_active = True
@@ -13,10 +15,16 @@ screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Data Visualisation")
 
-if len(sys.argv)>0:
-    filename = askdirectory()
+
+if len(sys.argv) < 2:
+    Tk().withdraw()
+    filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')
 else:
-    filename=str(argv[0])
+    filename=str(sys.argv[1])
+
+
+fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
+
 
 def plot_file(name):
     global frame_active
@@ -86,7 +94,7 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(1000/20)):
+    for i in range(int(fileno)):
         if frame_active == False:
             break
         plot_file(filename+"/"+str(i)+".txt")

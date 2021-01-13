@@ -118,10 +118,10 @@ public:
 		return safety_coefficient*cell_size*cell_size/2*std::min(1./diffusion_coefficient_parallel, 1./diffusion_coefficient_perpendicular);
 	}
 
-    string to_string()
+    std::string to_string()
     {
-        string rod_medium, liquid_medium;
-	    switch (rod_density)
+        std::string rod_medium, liquid_medium;
+	    switch ((int)rod_density)
         {
             case 1000:
                 rod_medium="water";
@@ -139,7 +139,7 @@ public:
                 rod_medium="honey";
                 break;
         }
-        switch (density)
+        switch ((int)density)
         {
             case 1000:
                 liquid_medium="water";
@@ -158,7 +158,7 @@ public:
                 break;
         }
 
-        return ";rod_med:"+rod_medium+";liquid_med:"+liquid_medium+";rod_len:"+std::to_string(rod_length)+";rod_width:"+std::to_string(rod_width)+";rods_per_volume:"+std::to_string(rods_per_volume)+";periodic_boundary:"+std::to_string(periodic_boundary_conditions)+"/"
+        return "-rod_med:"+rod_medium+"-liquid_med:"+liquid_medium+"-rod_len:"+std::to_string(rod_length)+"-rod_width:"+std::to_string(rod_width)+"-rods_per_volume:"+std::to_string(rods_per_volume)+"-periodic_boundary:"+std::to_string(periodic_boundary_conditions)+"/";
     }
 };
 #endif //_MEDIUMPARAMETERS_H_
