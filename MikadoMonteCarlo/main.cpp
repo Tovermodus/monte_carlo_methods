@@ -3,6 +3,7 @@
 int main ()
 {
 	double scale = 5e-4;
+
 	MediumParameters params(0.05*scale,
 				0.001*scale,
 				IRON_DENSITY,
@@ -27,12 +28,12 @@ int main ()
 	int plot_interval = 5000;
 	for(double i = 0; i < iterations; ++i) {
 		if((int)i%plot_interval == 0) {
-			loop.printToFile("PlotFiles/" + std::to_string(plotn++) + ".txt");
+			loop.printToFile("PlotFiles/iterations:" + std::to_string((int)(iterations/plot_interval))+ params.to_string() + std::to_string(plotn++) + ".txt");
 			std::cout << std::scientific << i << "\n";
 		}
 		loop.monte_carlo_step();
 	}
-	std::string command ="python3 ../Plot/visualization.py " + std::to_string((int)(iterations/plot_interval));
+	std::string command ="python3 ../Plot/visualization.py " + "../cmake-build-debug/PlotFiles/iterations:" + std::to_string((int)(iterations/plot_interval))+ params.to_string();
 	system(command.c_str());
 	return 0;
 }
