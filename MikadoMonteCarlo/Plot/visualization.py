@@ -4,6 +4,7 @@ import sys
 import re
 from tkinter import Tk
 from tkinter.filedialog import askdirectory
+import matplotlib.pyplot as plt
 
 frame_active = True
 
@@ -13,8 +14,14 @@ pix_w = 1000# (pix_w - 100)/(pix_h - 100) must be equal to w/h from real domain
 pix_h = 1000
 screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
+fps = 50
 pygame.display.set_caption("Data Visualisation")
+open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'w').close()
+runthrough=False
 
+def order_parameter(rods):
+    angles=np.array([r.phi for r in rods])
+    return np.mean(2*np.cos(angles)**2-1)
 
 if len(sys.argv) < 2:
     Tk().withdraw()
@@ -22,14 +29,23 @@ if len(sys.argv) < 2:
 else:
     filename=str(sys.argv[1])
 
-
+print(filename)
+print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
 
+def plot_order():
+    with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'r') as f:
+        order_p=np.array(f.readlines(), dtype=float)
+        plt.plot(order_p)
+        plt.title(r'Order parameter $S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$')
+        plt.xlabel('timesteps')
+        plt.ylabel('order parameter')
+        plt.savefig("../cmake-build-debug/PlotFiles/order_parameter.png")
+        plt.show()
 
 def plot_file(name):
     global frame_active
     rods = []
-    print(name)
     f = open(name)
     lines = f.readlines()
     whline = lines[0][:-1]
@@ -45,16 +61,17 @@ def plot_file(name):
         #print(x,y,phi)
         rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
 
+    if not runthrough:
+        with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'a') as f:
+            f.write(str(order_parameter(rods))+"\n")
 
 
     for event in pygame.event.get():
         if event.type== pygame.QUIT:
             frame_active = False
-    screen.fill((255,255,255))
     for rod in rods:
         rod.draw()
-    pygame.display.flip()
-    clock.tick(20)
+    f.close()
 
 
 
@@ -94,7 +111,33 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
+    font = pygame.font.SysFont(None, 24)
+    img = font.render(str(fps)+' frames er second', True, (0,0,0))
+    screen.blit(img, (0, 0))
+
     for i in range(int(fileno)):
+        ev = pygame.event.get()
+        for event in ev:
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                if(pos[1] < 30):
+                    fps = int(200*pos[0]/pix_w)
         if frame_active == False:
             break
-        plot_file(filename+"/"+str(i)+".txt")
+
+        screen.fill((255,255,255))
+        plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
+        vertices = [[0,0],[pix_w,0],[pix_w,30],[0,30]]
+        pygame.draw.polygon(screen, (255,0,0),vertices)
+        vertices = [[0,0],[int(pix_w*(i+1)/int(fileno)),0],[int(pix_w*(i+1)/int(fileno)),30],[0,30]]
+        pygame.draw.polygon(screen, (0,255,0),vertices)
+        screen.blit(img, (0, 0))
+
+        pygame.display.flip()
+        clock.tick(fps)
+
+    if not  runthrough:
+        plot_order()
+    runthrough=True
+    #if runthrough==0:
+    #    runthrough=1

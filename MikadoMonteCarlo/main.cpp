@@ -23,7 +23,7 @@ int main ()
 	std::mt19937 rng = std::mt19937(rd());
 	MonteCarloLoop loop(params,rng, params.estimate_time_step());
 	int plotn = 0;
-	double iterations = 5e6;
+	double iterations = 1e5;
 	int plot_interval = 5000;
     system(("mkdir PlotFiles/iterations:" + std::to_string((int)(iterations/plot_interval))+ params.to_string()).c_str());
     for(double i = 0; i < iterations; ++i) {
