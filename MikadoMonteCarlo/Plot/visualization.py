@@ -16,7 +16,6 @@ screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
 fps = 50
 pygame.display.set_caption("Data Visualisation")
-open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'w').close()
 runthrough=False
 
 def order_parameter(rods):
@@ -29,9 +28,10 @@ if len(sys.argv) < 2:
 else:
     filename=str(sys.argv[1])
 
-print(filename)
-print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
+#print(filename)
+#print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
+open(filename+"/order_parameter.txt", 'w').close()
 
 def plot_order():
     with open(filename+"/order_parameter.txt", 'r') as f:
@@ -109,7 +109,7 @@ class Rod:
 
 while frame_active:
     font = pygame.font.SysFont(None, 24)
-    img = font.render(str(fps)+' frames er second', True, (0,0,0))
+    img = font.render(str(fps)+' frames per second', True, (0,0,0))
     screen.blit(img, (0, 0))
 
     for i in range(int(fileno)):
