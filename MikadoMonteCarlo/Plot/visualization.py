@@ -34,13 +34,13 @@ print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
 
 def plot_order():
-    with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'r') as f:
+    with open(filename+"/order_parameter.txt", 'r') as f:
         order_p=np.array(f.readlines(), dtype=float)
         plt.plot(order_p)
         plt.title(r'Order parameter $S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$')
         plt.xlabel('timesteps')
         plt.ylabel('order parameter')
-        plt.savefig("../cmake-build-debug/PlotFiles/order_parameter.png")
+        plt.savefig(filename+"/order_parameter.png")
         plt.show()
 
 def plot_file(name):
@@ -62,7 +62,7 @@ def plot_file(name):
         rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
 
     if not runthrough:
-        with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'a') as f:
+        with open(filename+"/order_parameter.txt", 'a') as f:
             f.write(str(order_parameter(rods))+"\n")
 
 
