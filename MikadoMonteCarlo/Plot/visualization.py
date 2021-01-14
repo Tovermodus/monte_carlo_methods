@@ -66,9 +66,6 @@ def plot_file(name):
             f.write(str(order_parameter(rods))+"\n")
 
 
-    for event in pygame.event.get():
-        if event.type== pygame.QUIT:
-            frame_active = False
     for rod in rods:
         rod.draw()
     f.close()
@@ -118,6 +115,8 @@ while frame_active:
     for i in range(int(fileno)):
         ev = pygame.event.get()
         for event in ev:
+            if event.type== pygame.QUIT:
+                frame_active = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 if(pos[1] < 30):
