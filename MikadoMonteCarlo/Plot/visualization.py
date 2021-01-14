@@ -126,7 +126,7 @@ while frame_active:
             break
 
         screen.fill((255,255,255))
-        plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
+        plot_file(filename+"/"+str(i)+".txt")
         vertices = [[0,0],[pix_w,0],[pix_w,30],[0,30]]
         pygame.draw.polygon(screen, (255,0,0),vertices)
         vertices = [[0,0],[int(pix_w*(i+1)/int(fileno)),0],[int(pix_w*(i+1)/int(fileno)),30],[0,30]]
