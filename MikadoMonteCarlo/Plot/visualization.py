@@ -122,6 +122,7 @@ while frame_active:
                 pos = pygame.mouse.get_pos()
                 if(pos[1] < 30):
                     fps = int(200*pos[0]/pix_w)
+                    img = font.render(str(fps)+' frames er second', True, (0,0,0))
         if frame_active == False:
             break
 
