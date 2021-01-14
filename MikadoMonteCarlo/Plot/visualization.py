@@ -1,18 +1,20 @@
-import sys
-
 import pygame
 import numpy as np
+import sys
+import re
+from tkinter import Tk
+from tkinter.filedialog import askdirectory
 import matplotlib.pyplot as plt
+
 frame_active = True
 
 pygame.init()
 
 pix_w = 1000# (pix_w - 100)/(pix_h - 100) must be equal to w/h from real domain
 pix_h = 1000
-progressbar_height = 10
-timesteps = int(sys.argv[1])
 screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
+fps = 50
 pygame.display.set_caption("Data Visualisation")
 open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'w').close()
 runthrough=False
@@ -20,6 +22,16 @@ runthrough=False
 def order_parameter(rods):
     angles=np.array([r.phi for r in rods])
     return np.mean(2*np.cos(angles)**2-1)
+
+if len(sys.argv) < 2:
+    Tk().withdraw()
+    filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')
+else:
+    filename=str(sys.argv[1])
+
+print(filename)
+print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
+fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
 
 def plot_order():
     with open("../cmake-build-debug/PlotFiles/order_parameter.txt", 'r') as f:
@@ -30,7 +42,6 @@ def plot_order():
         plt.ylabel('order parameter')
         plt.savefig("../cmake-build-debug/PlotFiles/order_parameter.png")
         plt.show()
-
 
 def plot_file(name):
     global frame_active
@@ -100,20 +111,30 @@ class Rod:
                                              pix_h-int(self.drawy - length_radius_y)])
 
 while frame_active:
-    for i in range(int(timesteps)):
+    font = pygame.font.SysFont(None, 24)
+    img = font.render(str(fps)+' frames er second', True, (0,0,0))
+    screen.blit(img, (0, 0))
+
+    for i in range(int(fileno)):
+        ev = pygame.event.get()
+        for event in ev:
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                if(pos[1] < 30):
+                    fps = int(200*pos[0]/pix_w)
         if frame_active == False:
             break
 
         screen.fill((255,255,255))
         plot_file("../cmake-build-debug/PlotFiles/"+str(i)+".txt")
-
-        vertices = [[0,0],[pix_w,0],[pix_w,progressbar_height],[0,progressbar_height]]
+        vertices = [[0,0],[pix_w,0],[pix_w,30],[0,30]]
         pygame.draw.polygon(screen, (255,0,0),vertices)
-        vertices = [[0,0],[int(pix_w*(i+1)/timesteps),0],[int(pix_w*(i+1)/timesteps),progressbar_height],[0,progressbar_height]]
+        vertices = [[0,0],[int(pix_w*(i+1)/int(fileno)),0],[int(pix_w*(i+1)/int(fileno)),30],[0,30]]
         pygame.draw.polygon(screen, (0,255,0),vertices)
+        screen.blit(img, (0, 0))
 
         pygame.display.flip()
-        clock.tick(100)
+        clock.tick(fps)
 
     if not  runthrough:
         plot_order()
