@@ -48,9 +48,8 @@ class Rod : public std::enable_shared_from_this<Rod> {
 	std::shared_ptr<Cell> get_cell() const;
 	bool move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
 	bool reverse_move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
-	std::pair<double,double> apply_periodic_boundary_conditions(double medium_width,
-						double medium_height);
-	void reverse_boundary_movement(std::pair<double,double> boundary_movement);
+	std::pair<double, double> apply_periodic_boundary_conditions(double medium_width, double medium_height);
+	void reverse_boundary_movement(std::pair<double, double> boundary_movement);
 };
 
 #endif //_ROD_H_

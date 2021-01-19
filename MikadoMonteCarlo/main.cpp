@@ -4,8 +4,9 @@ int main()
 {
 	double scale = 1e-4;
 
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 3000 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 3000 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
 	std::random_device rd; //Will be used to obtain a seed for the random number engine

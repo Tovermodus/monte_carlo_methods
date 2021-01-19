@@ -15,8 +15,8 @@ TEST(OverlapTest, fewInitial)
 	std::mt19937 rng = std::mt19937(rd());
 	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 1, 100 / scale / scale, 5000, WATER_DENSITY,
 				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
-	Medium m(params,rng);
-	std::cout << (int)(m.calculate_energy()/1e200) << " overlaps \n";
+	Medium m(params, rng);
+	std::cout << (int)(m.calculate_energy() / 1e200) << " overlaps \n";
 	ASSERT_TRUE(m.calculate_energy() < 1e100);
 }
 TEST(OverlapTest, mediumInitial)
@@ -26,8 +26,8 @@ TEST(OverlapTest, mediumInitial)
 	std::mt19937 rng = std::mt19937(rd());
 	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 5, 500 / scale / scale, 5000, WATER_DENSITY,
 				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
-	Medium m(params,rng);
-	std::cout << (int)(m.calculate_energy()/1e200) << " overlaps \n";
+	Medium m(params, rng);
+	std::cout << (int)(m.calculate_energy() / 1e200) << " overlaps \n";
 	ASSERT_TRUE(m.calculate_energy() < 1e100);
 }
 TEST(OverlapTest, manyInitial)
@@ -35,10 +35,11 @@ TEST(OverlapTest, manyInitial)
 	double scale = 5e-5;
 	std::random_device rd;
 	std::mt19937 rng = std::mt19937(rd());
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 15, 1000 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
-	Medium m(params,rng);
-	std::cout << (int)(m.calculate_energy()/1e200) << " overlaps \n";
+	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 15, 1000 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
+	Medium m(params, rng);
+	std::cout << (int)(m.calculate_energy() / 1e200) << " overlaps \n";
 	ASSERT_TRUE(m.calculate_energy() < 1e100);
 }
 TEST(OverlapTest, fewWaterIron)
@@ -74,8 +75,9 @@ TEST(OverlapTest, manyWaterIron)
 	double scale = 5e-6;
 	std::random_device rd;
 	std::mt19937 rng = std::mt19937(rd());
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 15, 1000 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 15, 1000 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 
 	for (double i = 0; i < 1e4; ++i) {
@@ -88,8 +90,9 @@ TEST(OverlapTest, fewWaterLithium)
 	double scale = 5e-5;
 	std::random_device rd;
 	std::mt19937 rng = std::mt19937(rd());
-	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 100 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 100 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 
 	for (double i = 0; i < 2e5; ++i) {
@@ -102,8 +105,9 @@ TEST(OverlapTest, mediumWaterLithium)
 	double scale = 5e-3;
 	std::random_device rd;
 	std::mt19937 rng = std::mt19937(rd());
-	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 300 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 300 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 
 	for (double i = 0; i < 1e4; ++i) {
@@ -116,8 +120,9 @@ TEST(OverlapTest, manyWaterLithium)
 	double scale = 5e-6;
 	std::random_device rd;
 	std::mt19937 rng = std::mt19937(rd());
-	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 1000 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, LITHIUM_DENSITY, 15, 1000 / scale / scale, 5000,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 
 	for (double i = 0; i < 1e4; ++i) {

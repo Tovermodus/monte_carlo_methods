@@ -135,13 +135,13 @@ bool Rod::reverse_move_rod(double parallel_movement, double perpendicular_moveme
 	//std::cout << to_string() << "after movement\n";
 	return cell->check_if_rod_in_cell(shared_from_this());
 }
-std::pair<double,double> rod_movement_from_cartesian_movement(double angle, double move_x, double move_y)
+std::pair<double, double> rod_movement_from_cartesian_movement(double angle, double move_x, double move_y)
 {
-	double parralel = inner_product(move_x,move_y, std::cos(angle), std::sin(angle));
-	double perpendicular = inner_product(move_x,move_y, std::cos(angle+M_PI), std::sin(angle+M_PI));
-	return {parralel,perpendicular};
+	double parralel = inner_product(move_x, move_y, std::cos(angle), std::sin(angle));
+	double perpendicular = inner_product(move_x, move_y, std::cos(angle + M_PI), std::sin(angle + M_PI));
+	return { parralel, perpendicular };
 }
-std::pair<double,double> Rod::apply_periodic_boundary_conditions(double medium_width, double medium_height)
+std::pair<double, double> Rod::apply_periodic_boundary_conditions(double medium_width, double medium_height)
 {
 	double lastx = x;
 	double lasty = y;
@@ -156,9 +156,10 @@ std::pair<double,double> Rod::apply_periodic_boundary_conditions(double medium_w
 	while (y > medium_height)
 		y = medium_height - 1e-10;
 	//std::cout << to_string() <<"after boundary\n";
-	return{x - lastx, y - lasty};
+	return { x - lastx, y - lasty };
 }
-std::string Rod::to_string() const {
+std::string Rod::to_string() const
+{
 	std::ostringstream ret;
 	ret << std::scientific << get_x();
 	ret << " ";
@@ -167,7 +168,8 @@ std::string Rod::to_string() const {
 	ret << std::scientific << get_angle();
 	return ret.str();
 }
-void Rod::reverse_boundary_movement(std::pair<double,double> movement) {
+void Rod::reverse_boundary_movement(std::pair<double, double> movement)
+{
 	move_x(-movement.first);
 	move_y(-movement.second);
 }

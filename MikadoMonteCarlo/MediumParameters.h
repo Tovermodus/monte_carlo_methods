@@ -95,10 +95,11 @@ class MediumParameters {
 	}
 	void check_state()
 	{
-		if(rod_length < rod_width)
+		if (rod_length < rod_width)
 			throw std::domain_error("rod width is larger than rod length");
-		if(rod_length > width|| rod_length > height)
-			throw std::domain_error("rod is larger than medium" + std::to_string(rod_length) + " " +std::to_string(width) + " " + std::to_string(height));
+		if (rod_length > width || rod_length > height)
+			throw std::domain_error("rod is larger than medium" + std::to_string(rod_length) + " " +
+						std::to_string(width) + " " + std::to_string(height));
 	}
 	double estimate_time_step()
 	{
