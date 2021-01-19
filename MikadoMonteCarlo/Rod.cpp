@@ -10,7 +10,7 @@ bool Rod::check_collision(const std::shared_ptr<Rod> &other) const
 {
 	if (std::abs(get_x() - other->get_x()) + std::abs(get_y() - other->get_y()) > length + width)
 		return false;
-	std::array<double, 4> line_information_this{}, line_information_other{};
+std::array<double, 4> line_information_this{}, line_information_other{};
 	for (int i = 0; i < 4; i++) {
 		line_information_this = get_line_information(i);
 		for (int j = 0; j < 4; j++) {
@@ -39,7 +39,7 @@ std::array<double, 4> Rod::get_line_information(int line_index) const
 {
 	double center_x;
 	double center_y;
-	double angle;
+double angle;
 	double len;
 	switch (line_index) {
 	case 0:
