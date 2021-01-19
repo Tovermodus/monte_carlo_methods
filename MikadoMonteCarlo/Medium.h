@@ -18,7 +18,7 @@ class Medium {
 	std::shared_ptr<Rod> create_random_rod(std::mt19937 &rng) const;
 	bool rod_is_acceptable(const std::shared_ptr<Rod> &rod) const;
 	std::shared_ptr<Cell> get_cell_of_rod(const std::shared_ptr<Rod> &rod) const;
-std::shared_ptr<Cell> get_cell_of_position(double x, double y) const;
+	std::shared_ptr<Cell> get_cell_of_position(double x, double y) const;
 	std::vector<std::shared_ptr<Cell>> get_neighbours_of_cell(const std::shared_ptr<Cell> &cell) const;
 	void initialize_rods(std::mt19937 &rng);
 	void initialize_cells();

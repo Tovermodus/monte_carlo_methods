@@ -30,8 +30,8 @@ Rod::Rod(double initial_x, double initial_y, double initial_phi, double width, d
 {
 	this->x = initial_x;
 	this->y = initial_y;
-this->phi = initial_phi;
-this->width = width;
+	this->phi = initial_phi;
+	this->width = width;
 	this->length = length;
 	this->cell = cell;
 }
