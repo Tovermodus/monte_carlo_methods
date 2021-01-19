@@ -13,6 +13,5 @@ TEST(OverlapTest, initialOverlapLithiumWaterNormalTest)
 {
 }
 TEST(OverlapTest, initialOverlapLithiumWaterManyTest)
-{
-	ASSERT_TRUE(1);
+{ASSERT_TRUE(1);
 }
