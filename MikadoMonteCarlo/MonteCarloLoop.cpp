@@ -13,6 +13,10 @@ MonteCarloLoop::MonteCarloLoop(const MediumParameters &parameters, std::mt19937 
 	uniform_distribution = std::uniform_real_distribution<double>(0.0, 1.0);
 	time = 0.;
 }
+double MonteCarloLoop::calculate_energy()
+{
+	return m->calculate_energy();
+}
 void MonteCarloLoop::monte_carlo_step()
 {
 	Medium::Movement mov(m, time_step, rng);

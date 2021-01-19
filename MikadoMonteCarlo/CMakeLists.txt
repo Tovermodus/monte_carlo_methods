@@ -39,3 +39,7 @@ add_test(NAME rod_test COMMAND RodTest)
 add_executable(OverlapTest Rod.cpp Rod.h Cell.cpp Cell.h Medium.cpp Medium.h MediumParameters.h MonteCarloLoop.cpp MonteCarloLoop.h math_functions.h Test/overlaptest.cpp)
 target_link_libraries(OverlapTest gtest gtest_main)
 add_test(NAME overlap_test COMMAND OverlapTEST)
+
+add_executable(LongTimeTest Rod.cpp Rod.h Cell.cpp Cell.h Medium.cpp Medium.h MediumParameters.h MonteCarloLoop.cpp MonteCarloLoop.h math_functions.h Test/longtimetest.cpp Test/longtimetest.cpp)
+target_link_libraries(LongTimeTest gtest gtest_main)
+add_test(NAME longtime_test COMMAND LongTimeTest)

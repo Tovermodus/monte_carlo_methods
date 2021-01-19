@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include "Cell.h"
+#include <sstream>
 class Cell;
 
 class Rod : public std::enable_shared_from_this<Rod> {
@@ -28,10 +29,7 @@ class Rod : public std::enable_shared_from_this<Rod> {
 	Rod(double initial_x, double initial_y, double initial_phi, double width, double length,
 	    const std::shared_ptr<Cell> &cell);
 	Rod(const Rod &r);
-	std::string to_string() const
-	{
-		return std::to_string(get_x()) + " " + std::to_string(get_y()) + " " + std::to_string(get_angle());
-	}
+	std::string to_string() const;
 	bool check_collision(const std::shared_ptr<Rod> &other) const;
 	std::array<double, 4> get_line_information(int line_index) const; //centre of line in x,y, angle, length
 	bool move_to_cell(const std::shared_ptr<Cell> &new_cell);
@@ -50,7 +48,9 @@ class Rod : public std::enable_shared_from_this<Rod> {
 	std::shared_ptr<Cell> get_cell() const;
 	bool move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
 	bool reverse_move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
-	void apply_periodic_boundary_conditions(double medium_width, double medium_height);
+	std::pair<double,double> apply_periodic_boundary_conditions(double medium_width,
+						double medium_height);
+	void reverse_boundary_movement(std::pair<double,double> boundary_movement);
 };
 
 #endif //_ROD_H_

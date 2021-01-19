@@ -75,11 +75,15 @@ std::array<double, 4> Rod::get_line_information(int line_index) const
 }
 bool Rod::move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement)
 {
+	//std::cout << "\n";
+	//std::cout << to_string() << "before movement\n";
 	move_x(parallel_movement * std::cos(phi));
 	move_y(parallel_movement * std::sin(phi));
 	move_x(perpendicular_movement * std::cos(phi + M_PI));
 	move_y(perpendicular_movement * std::sin(phi + M_PI));
 	move_phi(rotation_movement);
+
+	//std::cout << to_string() << "after movement\n";
 	return !cell->check_if_rod_in_cell(shared_from_this());
 }
 Rod::Rod(const Rod &r) : enable_shared_from_this(r)
@@ -122,15 +126,27 @@ std::shared_ptr<Cell> Rod::get_cell() const
 }
 bool Rod::reverse_move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement)
 {
+	//std::cout << to_string() << "before movement\n";
 	move_phi(-rotation_movement); //rotation does not commute
 	move_x(-parallel_movement * std::cos(phi)); //translation is commutative
 	move_y(-parallel_movement * std::sin(phi));
 	move_x(-perpendicular_movement * std::cos(phi + M_PI));
 	move_y(-perpendicular_movement * std::sin(phi + M_PI));
+	//std::cout << to_string() << "after movement\n";
 	return cell->check_if_rod_in_cell(shared_from_this());
 }
-void Rod::apply_periodic_boundary_conditions(double medium_width, double medium_height)
+std::pair<double,double> rod_movement_from_cartesian_movement(double angle, double move_x, double move_y)
 {
+	double parralel = inner_product(move_x,move_y, std::cos(angle), std::sin(angle));
+	double perpendicular = inner_product(move_x,move_y, std::cos(angle+M_PI), std::sin(angle+M_PI));
+	return {parralel,perpendicular};
+}
+std::pair<double,double> Rod::apply_periodic_boundary_conditions(double medium_width, double medium_height)
+{
+	double lastx = x;
+	double lasty = y;
+	//std::cout << to_string() << "before boundary\n";
+	//std::cout << std::scientific << medium_width << " " << std::scientific << medium_height << "\n";
 	while (x < 0)
 		x += medium_width;
 	while (x > medium_width)
@@ -139,4 +155,19 @@ void Rod::apply_periodic_boundary_conditions(double medium_width, double medium_
 		y = 1e-10;
 	while (y > medium_height)
 		y = medium_height - 1e-10;
+	//std::cout << to_string() <<"after boundary\n";
+	return{x - lastx, y - lasty};
+}
+std::string Rod::to_string() const {
+	std::ostringstream ret;
+	ret << std::scientific << get_x();
+	ret << " ";
+	ret << std::scientific << get_y();
+	ret << " ";
+	ret << std::scientific << get_angle();
+	return ret.str();
+}
+void Rod::reverse_boundary_movement(std::pair<double,double> movement) {
+	move_x(-movement.first);
+	move_y(-movement.second);
 }

@@ -16,7 +16,7 @@ class Medium {
     private:
 	std::vector<std::shared_ptr<Cell>> cells;
 	std::shared_ptr<Rod> create_random_rod(std::mt19937 &rng) const;
-	bool rod_is_acceptable(const std::shared_ptr<Rod> &rod) const;
+	bool rod_is_acceptable(const std::shared_ptr<Rod> &rod, bool log_reason=false) const;
 	std::shared_ptr<Cell> get_cell_of_rod(const std::shared_ptr<Rod> &rod) const;
 std::shared_ptr<Cell> get_cell_of_position(double x, double y) const;
 	std::vector<std::shared_ptr<Cell>> get_neighbours_of_cell(const std::shared_ptr<Cell> &cell) const;
@@ -48,7 +48,7 @@ std::shared_ptr<Rod> changed_rod;
 		bool nothing_to_move = false;
 
 		bool moved = false;
-
+		std::pair<double,double> boundary_movement;
 	    public:
 		Movement(const std::shared_ptr<Medium> &m, double time_step, std::mt19937 &rng);
 		void execute_movement();
@@ -56,7 +56,6 @@ std::shared_ptr<Rod> changed_rod;
 		double calculate_energy_after_movement();
 		double calculate_energy_after_movement_for_rod();
 		double calculate_energy_before_movement_for_rod();
-		void apply_periodic_boundary_conditions_x();
 	};
 
 	std::shared_ptr<Cell> get_cell_in_direction(const std::shared_ptr<Cell> &cell, int x_direction,

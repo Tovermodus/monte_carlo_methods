@@ -21,6 +21,7 @@ class MonteCarloLoop {
 	MonteCarloLoop(const MediumParameters &parameters, std::mt19937 rng, const double &time_step);
 	void monte_carlo_step();
 	void printToFile(const std::string &filename);
+	double calculate_energy();
 };
 
 #endif //MIKADOMONTECARLO__MONTECARLOLOOP_H_

@@ -9,6 +9,10 @@
 #include <limits>
 #include <cassert>
 
+double inner_product(double x1, double y1, double x2, double y2)
+{
+	return x1*x2+y1*y2;
+}
 bool lines_intersect_in_range(double angle1, double angle2, //angle to x-axis
 			      double central_x1, double central_x2, //central point of lines in x-direction
 			      double central_y1, double central_y2, //central point of lines in y-direction

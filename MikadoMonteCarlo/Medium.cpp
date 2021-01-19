@@ -9,6 +9,8 @@ Medium::Medium(const MediumParameters &params, std::mt19937 &rng) : parameters(p
 {
 	initialize_cells();
 	initialize_rods(rng);
+	if(cells[0]->get_height() < params.rod_length||cells[0]->get_height() < params.rod_length)
+		throw std::domain_error("rods are larger than cells");
 }
 void Medium::initialize_rods(std::mt19937 &rng)
 {
@@ -28,52 +30,57 @@ void Medium::initialize_rods(std::mt19937 &rng)
 	}
 	std::cout << rod_number << "rods placed\n";
 }
-double Medium::calculate_energy() const
+double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
 {
 	double ret = 0;
 	double rod_mass_difference = parameters.rod_length * parameters.rod_width * parameters.rod_width *
-				     (parameters.rod_density - parameters.density);
+		(parameters.rod_density - parameters.density);
+	ret += rod->get_y() * parameters.gravity * rod_mass_difference;
+	if(!rod_is_acceptable(rod))
+		return 1e200;
+	return ret;
+}
+double Medium::calculate_energy() const
+{
+	double ret = 0;
 	for (const std::shared_ptr<Cell> &cell : cells) {
-		int n_rods = cell->number_rods_in_patch();
 		for (int i = 0; i < cell->number_rods_in_cell(); ++i) {
 			std::shared_ptr<Rod> r = cell->get_rod_in_cell(i);
-			ret += r->get_y() * parameters.gravity * rod_mass_difference;
-			if (r->get_y() - std::abs(std::sin(r->get_angle()) * parameters.rod_length) < 0)
-				return 1e200;
-			if (r->get_y() > parameters.height)
-				return 1e200;
-			if (!parameters.periodic_boundary_conditions) {
-				if (r->get_x() - std::abs(std::cos(r->get_angle()) * parameters.rod_length) < 0)
-					return 1e200;
-				if (r->get_x() + std::abs(std::cos(r->get_angle()) * parameters.rod_length) >
-				    parameters.width)
-					return 1e200;
-			}
-			for (int j = 0; j < n_rods; ++j) {
-				if (r == cell->get_rod_in_patch(j))
-					continue;
-				if (r->check_collision(cell->get_rod_in_patch(j))) {
-					return 1e200;
-				}
-			}
+			ret += calculate_energy_for_rod(r);
 		}
 	}
 	return ret;
 }
-bool Medium::rod_is_acceptable(const std::shared_ptr<Rod> &rod) const
-{
-	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
+bool Medium::rod_is_acceptable(const std::shared_ptr<Rod> &rod, bool log_reason) const {
+	std::shared_ptr<Cell> cell_of_rod = rod->get_cell();
+	if (rod->get_y() - std::abs(std::sin(rod->get_angle())*parameters.rod_length) < 0) {
+		if (log_reason)
+			std::cout << "y-overflow bottom ";
 		return false;
-	if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
+	}
+	if (rod->get_y() + std::abs(std::sin(rod->get_angle())*parameters.rod_length) > parameters.height) {
+		if (log_reason)
+			std::cout << "y-overflow top ";
 		return false;
-	if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
-		return false;
-	if (rod->get_y() > parameters.height)
-		return false;
-	for (int i = 0; i < rod->get_cell()->number_rods_in_patch(); i++) {
-		if (rod->get_cell()->get_rod_in_patch(i) == rod)
+	}
+	if (!parameters.periodic_boundary_conditions) {
+		if (rod->get_x() - std::abs(std::cos(rod->get_angle())*parameters.rod_length) < 0) {
+			if (log_reason)
+				std::cout << "x-overflow left ";
+			return false;
+		}
+		if (rod->get_x() + std::abs(std::cos(rod->get_angle())*parameters.rod_length) > parameters.width) {
+			if (log_reason)
+				std::cout << "x-overflow right ";
+			return false;
+		}
+	}
+	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
+		if (rod==cell_of_rod->get_rod_in_patch(j))
 			continue;
-		if (rod->get_cell()->get_rod_in_patch(i)->check_collision(rod)) {
+		if (rod->check_collision(cell_of_rod->get_rod_in_patch(j))) {
+			if (log_reason)
+				std::cout << "collision ";
 			return false;
 		}
 	}
@@ -187,32 +194,6 @@ std::vector<std::shared_ptr<Cell>> Medium::get_neighbours_of_cell(const std::sha
 		}
 	return ret;
 }
-double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
-{
-	double ret = 0;
-	double rod_mass_difference = parameters.rod_length * parameters.rod_width * parameters.rod_width *
-				     (parameters.rod_density - parameters.density);
-	std::shared_ptr<Cell> cell_of_rod = rod->get_cell();
-	ret += rod->get_y() * parameters.gravity * rod_mass_difference;
-	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
-		return 1e200;
-	if (rod->get_y() + std::abs(std::sin(rod->get_angle()) * parameters.rod_length) > parameters.height)
-		return 1e200;
-	if (!parameters.periodic_boundary_conditions) {
-		if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
-			return 1e200;
-		if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
-			return 1e200;
-	}
-	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
-		if (rod == cell_of_rod->get_rod_in_patch(j))
-			continue;
-		if (rod->check_collision(cell_of_rod->get_rod_in_patch(j))) {
-			return 1e200;
-		}
-	}
-	return ret;
-}
 
 double Medium::Movement::calculate_energy_after_movement()
 {
@@ -248,18 +229,13 @@ Medium::Movement::Movement(const std::shared_ptr<Medium> &m, const double time_s
 	perpendicular_movement = perpendicular_distrib(rng);
 	rotation_movement = rotation_distrib(rng);
 }
-void Medium::Movement::apply_periodic_boundary_conditions_x()
-{
-	if (nothing_to_move)
-		return;
-}
 void Medium::Movement::execute_movement()
 {
 	if (nothing_to_move)
 		return;
 	if (!moved) {
 		rod_changes_cell = changed_rod->move_rod(parallel_movement, perpendicular_movement, rotation_movement);
-		changed_rod->apply_periodic_boundary_conditions(m->parameters.width, m->parameters.height);
+		boundary_movement = changed_rod->apply_periodic_boundary_conditions(m->parameters.width, m->parameters.height);
 		if (rod_changes_cell)
 			new_cell = changed_cell->move_rod_to_neighbour(changed_rod);
 	}
@@ -271,7 +247,7 @@ void Medium::Movement::reverse_movement()
 		return;
 	if (moved) {
 		changed_rod->reverse_move_rod(parallel_movement, perpendicular_movement, rotation_movement);
-		changed_rod->apply_periodic_boundary_conditions(m->parameters.width, m->parameters.height);
+		changed_rod->reverse_boundary_movement(boundary_movement);
 		changed_rod->move_to_cell(changed_cell);
 	}
 	moved = false;

@@ -5,6 +5,7 @@
 #ifndef _MEDIUMPARAMETERS_H_
 #define _MEDIUMPARAMETERS_H_
 #include <cmath>
+#include <stdexcept>
 
 const double WATER_DENSITY = 1000;
 const double IRON_DENSITY = 7874;
@@ -66,6 +67,7 @@ class MediumParameters {
 		  diffusion_coefficient_parallel(boltz * temperature / friction_parallel),
 		  diffusion_coefficient_perpendicular(boltz * temperature / friction_perpendicular)
 	{
+		check_state();
 	}
 
 	MediumParameters(const MediumParameters &params)
@@ -89,6 +91,14 @@ class MediumParameters {
 		  diffusion_coefficient_parallel(boltz * temperature / friction_parallel),
 		  diffusion_coefficient_perpendicular(boltz * temperature / friction_perpendicular)
 	{
+		check_state();
+	}
+	void check_state()
+	{
+		if(rod_length < rod_width)
+			throw std::domain_error("rod width is larger than rod length");
+		if(rod_length > width|| rod_length > height)
+			throw std::domain_error("rod is larger than medium" + std::to_string(rod_length) + " " +std::to_string(width) + " " + std::to_string(height));
 	}
 	double estimate_time_step()
 	{
