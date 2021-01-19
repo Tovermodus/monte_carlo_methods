@@ -135,7 +135,7 @@ void Rod::apply_periodic_boundary_conditions(double medium_width, double medium_
 	while (x > medium_width)
 		x -= medium_width;
 	while (y<0)
-		y+= medium_height;
+		y= 1e-10;
 	while (y>medium_height)
-		y-=medium_height;
+		y=medium_height-1e-10;
 }

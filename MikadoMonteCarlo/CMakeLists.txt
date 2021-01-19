@@ -31,6 +31,11 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
         EXCLUDE_FROM_ALL)
 
 
-add_executable(RodTest Rod.cpp Rod.h Test/rodtest.cpp)
+add_executable(RodTest Rod.cpp Rod.h Cell.cpp Cell.h Test/rodtest.cpp)
 target_link_libraries(RodTest gtest gtest_main)
 add_test(NAME rod_test COMMAND RodTest)
+
+
+add_executable(OverlapTest Rod.cpp Rod.h Cell.cpp Cell.h Medium.cpp Medium.h MediumParameters.h MonteCarloLoop.cpp MonteCarloLoop.h math_functions.h Test/overlaptest.cpp)
+target_link_libraries(OverlapTest gtest gtest_main)
+add_test(NAME overlap_test COMMAND OverlapTEST)

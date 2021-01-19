@@ -79,6 +79,8 @@ std::string Cell::to_string()
 }
 std::shared_ptr<Cell> Cell::move_rod_to_neighbour(const std::shared_ptr<Rod> &rod)
 {
+	if(check_if_rod_in_cell(rod))
+		return neighbour_cells[0]->move_rod_to_neighbour(rod);
 	for(const std::shared_ptr<Cell>& neighbour:neighbour_cells)
 	{
 		if(neighbour->check_if_rod_in_cell(rod))

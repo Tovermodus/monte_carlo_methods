@@ -41,21 +41,21 @@ double Medium::calculate_energy() const
 			std::shared_ptr<Rod> r = cell->get_rod_in_cell(i);
 			ret += r->get_y() * parameters.gravity*rod_mass_difference;
 			if (r->get_y() - std::abs(std::sin(r->get_angle()) * parameters.rod_length) < 0)
-				return 1e100;
+				return 1e200;
 			if (r->get_y() > parameters.height)
-				return 1e100;
+				return 1e200;
 			if(!parameters.periodic_boundary_conditions) {
 				if (r->get_x() - std::abs(std::cos(r->get_angle()) * parameters.rod_length) < 0)
-					return 1e100;
+					return 1e200;
 				if (r->get_x() + std::abs(std::cos(r->get_angle()) * parameters.rod_length) >
 				    parameters.width)
-					return 1e100;
+					return 1e200;
 			}
 			for (int j = 0; j < n_rods; ++j) {
 				if (r == cell->get_rod_in_patch(j))
 					continue;
 				if (r->check_collision(cell->get_rod_in_patch(j))) {
-					return 1e100;
+					return 1e200;
 				}
 			}
 		}
@@ -196,20 +196,20 @@ double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
 	std::shared_ptr<Cell> cell_of_rod = rod->get_cell();
 	ret += rod->get_y() * parameters.gravity*rod_mass_difference;
 	if (rod->get_y() - std::abs(std::sin(rod->get_angle()) * parameters.rod_length) < 0)
-		return 1e100;
+		return 1e200;
 	if (rod->get_y() + std::abs(std::sin(rod->get_angle()) * parameters.rod_length)> parameters.height)
-		return 1e100;
+		return 1e200;
 	if(!parameters.periodic_boundary_conditions) {
 		if (rod->get_x() - std::abs(std::cos(rod->get_angle()) * parameters.rod_length) < 0)
-			return 1e100;
+			return 1e200;
 		if (rod->get_x() + std::abs(std::cos(rod->get_angle()) * parameters.rod_length) > parameters.width)
-			return 1e100;
+			return 1e200;
 	}
 	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
 		if (rod == cell_of_rod->get_rod_in_patch(j))
 			continue;
 		if (rod->check_collision(cell_of_rod->get_rod_in_patch(j))) {
-			return 1e100;
+			return 1e200;
 		}
 	}
 	return ret;
