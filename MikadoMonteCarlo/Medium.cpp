@@ -36,6 +36,8 @@ double Medium::calculate_energy_for_rod(const std::shared_ptr<Rod> &rod) const
 	double rod_mass_difference = parameters.rod_length * parameters.rod_width * parameters.rod_width *
 				     (parameters.rod_density - parameters.density);
 	ret += rod->get_y() * parameters.gravity * rod_mass_difference;
+	if(parameters.ellipsoidal_potential!=0)
+		ret+=calculate_ellipsoidal_potential(rod);
 	if (!rod_is_acceptable(rod))
 		return 1e200;
 	return ret;
@@ -193,6 +195,20 @@ std::vector<std::shared_ptr<Cell>> Medium::get_neighbours_of_cell(const std::sha
 					std::cout << "neighbours: nullptr\n";
 			throw std::domain_error("something witht the domain went wrong");
 		}
+	return ret;
+}
+double Medium::calculate_ellipsoidal_potential(const std::shared_ptr<Rod> &rod) const {
+	double ret = 0;
+	std::shared_ptr<Cell> cell_of_rod = rod->get_cell();
+	for (int j = 0; j < cell_of_rod->number_rods_in_patch(); ++j) {
+		std::shared_ptr<Rod> other = cell_of_rod->get_rod_in_patch(j);
+		if(other->get_x() - rod->get_x() > 2*parameters.rod_length || other->get_y() - rod->get_y() > 2*parameters.rod_length)
+			continue;
+		if (rod->ellipsoid_radius(other->get_x(),other->get_y()) == 0)
+			continue;
+		ret += parameters.ellipsoidal_potential/std::pow(rod->ellipsoid_radius(other->get_x(),other->get_y()),6);
+		ret += parameters.ellipsoidal_potential/std::pow(other->ellipsoid_radius(rod->get_x(),rod->get_y()),6);
+	}
 	return ret;
 }
 

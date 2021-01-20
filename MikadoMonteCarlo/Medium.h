@@ -22,7 +22,7 @@ class Medium {
 	std::vector<std::shared_ptr<Cell>> get_neighbours_of_cell(const std::shared_ptr<Cell> &cell) const;
 	void initialize_rods(std::mt19937 &rng);
 	void initialize_cells();
-
+	double calculate_ellipsoidal_potential(const std::shared_ptr<Rod> &rod) const;
     public:
 	const MediumParameters parameters;
 	explicit Medium(const MediumParameters &params, std::mt19937 &rng);

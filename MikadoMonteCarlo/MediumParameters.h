@@ -31,6 +31,7 @@ class MediumParameters {
 	double density;
 	double viscosity;
 	bool periodic_boundary_conditions;
+	double ellipsoidal_potential;
 	double width;
 	double height;
 
@@ -50,12 +51,12 @@ class MediumParameters {
 
 	MediumParameters(double rod_length, double rod_width, double rod_density, int number_of_cells_per_direction,
 			 double rods_per_volume, int rod_placing_max_iterations, double density, double viscosity,
-			 bool periodic_boundary_conditions, double width, double height, double gravity,
+			 bool periodic_boundary_conditions, double ellipsoidal_potential, double width, double height, double gravity,
 			 double temperature)
 		: rod_length(rod_length), rod_width(rod_width), rod_density(rod_density),
 		  number_of_cells_per_direction(number_of_cells_per_direction), rods_per_volume(rods_per_volume),
 		  rod_placing_max_iterations(rod_placing_max_iterations), density(density), viscosity(viscosity),
-		  periodic_boundary_conditions(periodic_boundary_conditions), width(width), height(height),
+		  periodic_boundary_conditions(periodic_boundary_conditions), ellipsoidal_potential(ellipsoidal_potential),  width(width), height(height),
 		  gravity(gravity), temperature(temperature), aspect_ratio(rod_length / rod_width),
 		  friction_rotation(M_PI * viscosity * std::pow(rod_length, 3) /
 				    (3 * (std::log(aspect_ratio) + end_correction_rotation))),
@@ -76,6 +77,7 @@ class MediumParameters {
 		  rods_per_volume(params.rods_per_volume),
 		  rod_placing_max_iterations(params.rod_placing_max_iterations), density(params.density),
 		  viscosity(params.viscosity), periodic_boundary_conditions(params.periodic_boundary_conditions),
+		  ellipsoidal_potential(params.ellipsoidal_potential),
 		  width(params.width), height(params.height), gravity(params.gravity), temperature(params.temperature),
 		  boltz(params.boltz), end_correction_rotation(params.end_correction_rotation),
 		  end_correction_parallel(params.end_correction_parallel),
