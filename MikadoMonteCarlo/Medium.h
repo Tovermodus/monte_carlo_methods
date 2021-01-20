@@ -23,6 +23,7 @@ class Medium {
 	void initialize_rods(std::mt19937 &rng);
 	void initialize_cells();
 	double calculate_ellipsoidal_potential(const std::shared_ptr<Rod> &rod) const;
+
     public:
 	const MediumParameters parameters;
 	explicit Medium(const MediumParameters &params, std::mt19937 &rng);

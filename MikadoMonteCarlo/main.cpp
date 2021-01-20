@@ -5,8 +5,8 @@ int main()
 	double scale = 5e-4;
 
 	MediumParameters params(0.01 * scale, 0.001 * scale, IRON_DENSITY, 50, 1000 / scale / scale, 5000,
-				WATER_DENSITY, WATER_VISCOSITY, true, 0*std::pow(scale,6), 1 * scale, 1 * scale, EARTH_GRAVITY,
-				ROOM_TEMPERATURE);
+				WATER_DENSITY, WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale,
+				EARTH_GRAVITY, ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
 	std::random_device rd; //Will be used to obtain a seed for the random number engine
