@@ -113,6 +113,11 @@ while frame_active:
     screen.blit(img, (0, 0))
 
     for i in range(int(fileno)):
+        fpsrange = fps//30
+        if fpsrange > 1:
+            if i%fpsrange != 0:
+                #plot_file(filename+"/"+str(i)+".txt")
+                continue
         ev = pygame.event.get()
         for event in ev:
             if event.type== pygame.QUIT:
@@ -120,11 +125,10 @@ while frame_active:
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 if(pos[1] < 30):
-                    fps = int(200*pos[0]/pix_w)
+                    fps = int(300*(pos[0] + 2*max(0,pos[0]-300))/pix_w)
                     img = font.render(str(fps)+' frames er second', True, (0,0,0))
         if frame_active == False:
             break
-
         screen.fill((255,255,255))
         plot_file(filename+"/"+str(i)+".txt")
         vertices = [[0,0],[pix_w,0],[pix_w,30],[0,30]]
@@ -134,7 +138,8 @@ while frame_active:
         screen.blit(img, (0, 0))
 
         pygame.display.flip()
-        clock.tick(fps)
+
+        clock.tick(min(fps,60))
 
     if not  runthrough:
         plot_order()
