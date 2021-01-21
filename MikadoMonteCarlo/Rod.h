@@ -50,6 +50,7 @@ class Rod : public std::enable_shared_from_this<Rod> {
 	bool reverse_move_rod(double parallel_movement, double perpendicular_movement, double rotation_movement);
 	std::pair<double, double> apply_periodic_boundary_conditions(double medium_width, double medium_height);
 	void reverse_boundary_movement(std::pair<double, double> boundary_movement);
+	double ellipsoid_radius(double point_x, double point_y) const;
 };
 
 #endif //_ROD_H_
