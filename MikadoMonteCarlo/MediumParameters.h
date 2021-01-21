@@ -6,6 +6,7 @@
 #define _MEDIUMPARAMETERS_H_
 #include <cmath>
 #include <stdexcept>
+#include <iostream>
 
 const double WATER_DENSITY = 1000;
 const double IRON_DENSITY = 7874;
@@ -149,11 +150,10 @@ class MediumParameters {
 			liquid_medium = "honey";
 			break;
 		}
-
 		return "-rod_med:" + rod_medium + "-liquid_med:" + liquid_medium +
 		       "-rod_len:" + std::to_string(rod_length) + "-rod_width:" + std::to_string(rod_width) +
 		       "-rods_per_volume:" + std::to_string(rods_per_volume) +
-			"-ellipsoidal_potential:" + std::to_string(ellipsoidal_potential)+
+		       "-ellipsoidal_potential:" + std::to_string(ellipsoidal_potential/std::pow(width,6)) +
 		       "-periodic_boundary:" + std::to_string(periodic_boundary_conditions) + "/";
 	}
 };
