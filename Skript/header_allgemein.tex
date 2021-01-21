@@ -1,0 +1,355 @@
+\renewcommand{\iflanguage}[3]{\ifthenelse{\equal{\languagename}{#1}}{#2}{#3}}
+\newcommand\numeq[1]%
+{\stackrel{\scriptscriptstyle(\mkern-1.5mu#1\mkern-1.5mu)}{=}}
+
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+ \bibliography{/home/tovermodus/Documents/Studium/Sonstiges/bibliothek}
+
+
+
+
+\DeclareMathOperator*{\Supp}{supp}
+\DeclareMathOperator*{\Lin}{lin}
+\DeclareMathOperator*{\Ran}{ran}
+\DeclareMathOperator*{\Rank}{\iflanguage{german}{rang}{rank}}
+\DeclareMathOperator*{\Ind}{ind}
+\DeclareMathOperator*{\Eran}{essran}
+\DeclareMathOperator*{\Ker}{ker}
+\DeclareMathOperator*{\Dist}{dist}
+\DeclareMathOperator*{\Det}{det}
+\DeclareMathOperator*{\Arg}{Arg}
+\DeclareMathOperator*{\Argmin}{argmin}
+
+\DeclareMathOperator*{\Codim}{codim}
+\newcommand{\Tr}{\operatorname{tr}\,}
+\DeclareMathOperator*{\Span}{span}
+\renewcommand{\Vec}{\operatorname{vec}}
+
+
+\newcommand{\xn}{(x_n)_{n\in\N}}
+\newcommand{\yn}{(y_n)_{n\in\N}}
+\newcommand{\un}{(u_n)_{n\in\N}}
+\newcommand{\fn}[1]{(#1)_{n\in\N}}
+\newcommand{\limx}{\lim_{x\to \infty}}
+\newcommand{\limn}{\lim_{n\to \infty}}
+\newcommand{\limk}{\lim_{k\to \infty}}
+\renewcommand{\mod}{~\operatorname{mod}~}
+\NewDocumentCommand{\diri}{O{a} O{n}}{\sum_{#2=1}^{\infty}\frac{#1(#2)}{#2^s}}
+\NewDocumentCommand{\sumn}{O{0} O{\infty} O{n}}{\sum_{#3=#1}^{#2}}
+\NewDocumentCommand{\sumk}{O{0} O{\infty} O{k}}{\sum_{#3=#1}^{#2}}
+\NewDocumentCommand{\sumi}{O{0} O{\infty} O{i}}{\sum_{#3=#1}^{#2}}
+\NewDocumentCommand{\summ}{O{0} O{\infty} O{m}}{\sum_{#3=#1}^{#2}}
+\NewDocumentCommand{\prodn}{O{0} O{\infty}}{\prod_{n=#1}^{#2}}
+\NewDocumentCommand{\prodk}{O{0} O{\infty}}{\prod_{k=#1}^{#2}}
+\NewDocumentCommand{\ppot}{O{k} O{r}}{p_1^{#2_1}\cdots p_{#1}^{r_#1}}
+\NewDocumentCommand{\xpot}{O{x} O{k} O{r}}{#1_1^{#3_1}\cdots #1_{#2}^{r_#2}}
+\newcommand{\prodp}{\prod_{p~prim}}
+\newcommand{\eulerp}[1][a]{\prod_{p~prim}\left(1+\sum_{\nu=1}^\infty\frac{#1}{p^{\nu s}}\right)}
+\newcommand{\norm}[1]{\lt\|#1\rt\|}
+\newcommand{\eb}[1]{\frac{1}{#1}}
+\newcommand{\eh}[1]{\frac{#1}{2}}
+\newcommand{\keb}[1]{\left(\frac{1}{#1}\right)}
+\newcommand{\kfrac}[2]{\left(\frac{#1}{#2}\right)}
+\newcommand{\limt}{\lim_{t\to \infty}}
+\newcommand{\limh}{\lim_{h\to 0}}
+\newcommand{\meng}[2]{\left\{#1\middle|~#2\right\}}
+\newcommand{\xnk}{(x_{n_k})_{k\in\N}}
+\newcommand{\hatw}{\widehat}
+\newcommand{\D}{\mathcal{D}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Div}{\operatorname{div}}
+\renewcommand{\div}{\Div}
+\newcommand{\Grad}{\mathrm{D}}
+\newcommand{\I}{\operatorname{Id}}
+\newcommand{\Id}{\operatorname{Id}}
+\newcommand{\Rot}{\operatorname{\iflanguage{german}{rot}{curl}}}
+\newcommand{\Diag}{\operatorname{diag}}
+\newcommand{\<}{\left\langle}
+\newcommand{\wto}{\rightharpoonup}
+\newcommand{\wtos}{\overset{\ast}{\rightharpoonup}}
+\newenvironment*{§}{$\displaystyle}{$}
+\renewcommand{\>}{\right\rangle}
+\newcommand{\R}{\mathbb{R}}
+\newcounter{subeqqq}
+\renewcommand{\thesubeqqq}{\theequation\alph{subeqqq}}
+\newcommand{\thesubequation}{\thesubeqqq}
+\makeatletter
+\newcommand\slabel[1]{%
+\@bsphack
+\if@filesw
+{\let\thepage\relax
+\def\protect{\noexpand\noexpand\noexpand}%
+\edef\@tempa{\write\@auxout{\string
+\newlabel{#1}{{\thesubeqqq}{\thepage}}}}%
+\expandafter}\@tempa
+\if@nobreak \ifvmode\nobreak\fi\fi
+\fi\@esphack}
+\makeatother
+
+
+\newcolumntype{R}{>{\displaystyle}r}
+\newcolumntype{L}{>{\displaystyle}l}
+\newcolumntype{C}{>{\displaystyle}c}
+\newcolumntype{N}{>{\stepcounter{subeqqq}\quad\mathrm{(\thesubeqqq)}}r}
+\newcolumntype{M}{>{\stepcounter{subeqqq}\quad\mathrm{(\thesubeqqq)}}r}
+\newenvironment{arraynum}[1]
+{
+    \setcounter{subeqqq}{0}
+  \refstepcounter{equation}
+  \begin{equation*}
+      \begin{array}{#1 Nc}
+        }
+        {
+      \end{array}
+  \end{equation*}
+}
+
+\newenvironment{arraynumr}[1]
+{
+    \setcounter{subeqqq}{0}
+  \refstepcounter{equation}
+  \begin{equation*}
+    %\begin{array}{>{\raggedleft\arraybackslash}p{\linewidth}}
+      \begin{array}{#1 Nc}
+        }
+        {
+      \end{array}
+    %\end{array}
+  \end{equation*}
+}
+
+        
+        
+%\setlist{enumerate}{topsep=0pt}
+\newcounter{equinum}
+\newcounter{eqlnum}
+\newcounter{eqrnum}
+\newcommand{\labelequiv}[1]{\def\equivname{#1}\setcounter{equinum}{1}\setcounter{eqrnum}{1}\setcounter{eqlnum}{1}}
+\newcommand{\eqitem}{\item \def\equinumber{\alph{equinum}}\label{\equivname\equinumber}\stepcounter{equinum}}
+
+\newcommand{\eqritem}{\item[\ref{\equivname\alph{eqrnum}}$\Rightarrow$\stepcounter{eqrnum}\ifnum\value{eqrnum}=\value{equinum}\setcounter{eqrnum}{1}\fi\ref{\equivname\alph{eqrnum}}]}
+\newcommand{\eqlitem}{\item[\ref{\equivname\alph{eqlnum}}\stepcounter{eqlnum}]}
+\newcommand{\eqraitem}[2]{\item[\ref{\equivname#1}$\Rightarrow$\ref{\equivname#2}]}
+
+
+\renewcommand*{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\renewcommand{\AA}{\mathbb{A}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\MM}{\mathbb{M}}
+\renewcommand{\a}{~\textnormal{\iflanguage{german}{auf}{on} }}
+\renewcommand{\i}{~\textnormal{in }}
+\newcommand{\ex}{~\textnormal{\iflanguage{german}{existiert}{exists} }}
+\newcommand{\fa}{\quad\textnormal{\iflanguage{german}{für alle}{for all} }}
+\newcommand{\st}{\quad\textnormal{s.t. }}
+\newcommand{\f}{\quad\textnormal{\iflanguage{german}{für}{for} }}
+\newcommand{\so}{\quad\textnormal{\iflanguage{german}{sonst}{else} }}
+\newcommand{\fü}{\quad\textnormal{\iflanguage{german}{f.ü.}{a.e.} }}
+\newcommand{\m}{~\textnormal{\iflanguage{german}{mit}{with} }}
+\newcommand{\E}{\mathbbm{1}}
+\renewcommand{\O}{\mathcal{O}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\RR}{\mathcal{R}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\Schwarz}{\mathcal{S}}
+\newcommand{\bepsilon}{\varepsilon}
+\newcommand{\bphi}{\varphi}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\arraystretch}{1.3}
+\newcommand{\mydots}[1]{\IfBeginWith{#1}{,}{\ldots#1}{\cdots#1}}
+%Klammern
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\mt}{\middle}
+\arraycolsep=2pt
+\makeatletter
+\RenewDocumentEnvironment{cases}{ O{l>{\quad}l} O{1.2} }
+ {\let\@ifnextchar\new@ifnextchar
+  \left\lbrace
+  \def\arraystretch{#2}%
+  \array{#1}}
+ {\endarray\right.}
+\makeatother
+\newcommand{\mat}[2][6pt]{\arraycolsep=#1\begin{pmatrix}#2\end{pmatrix}}
+\newcommand{\smat}[1]{\left(\begin{smallmatrix}#1\end{smallmatrix}\right)}
+\catcode`ω=13
+\catcode`ℵ=13
+\catcode`ε=13
+\catcode`ζ=13
+\catcode`τ=13
+\catcode`θ=13
+\catcode`ι=13
+\catcode`ρ=13
+\catcode`π=13
+\catcode`α=13
+\catcode`σ=13
+\catcode`δ=13
+\catcode`φ=13
+\catcode`γ=13
+\catcode`η=13
+\catcode`∂=13
+\catcode`ξ=13
+\catcode`κ=13
+\catcode`λ=13
+\catcode`υ=13
+\catcode`χ=13
+\catcode`ψ=13
+\catcode`β=13
+\catcode`ν=13
+\catcode`μ=13
+\catcode`Ω=13
+\catcode`Θ=13
+\catcode`Π=13
+\catcode`Σ=13
+\catcode`Δ=13
+\catcode`Φ=13
+\catcode`Γ=13
+\catcode`Ξ=13
+\catcode`Λ=13
+\catcode`Ψ=13
+\catcode`⇒=13
+\catcode`⇔=13
+\catcode`∈=13
+\catcode`⊂=13
+\catcode`∪=13
+\catcode`∩=13
+\catcode`∃=13
+\catcode`∀=13
+\catcode`⇐=13
+\catcode`∋=13
+\catcode`⊃=13
+\catcode`×=13
+\catcode`⋅=13
+\catcode`∇=13
+\catcode`‾=13
+\catcode`∞=13
+\catcode`⊗=13
+\catcode`…=13
+\def∞{\infty}
+\def∇{\Grad}
+\defΨ{\Psi}
+\def‾{\overline}
+\defω{\omega}
+\defℵ{\aleph}
+\defε{\epsilon}
+\defζ{\zeta}
+\defτ{\tau }
+\defθ{\theta}
+\defι{\iota}
+\defρ{\rho}
+\defπ{\pi}
+\defα{\alpha}
+\defσ{\sigma}
+\defδ{\delta}
+\defφ{\varphi}
+\defγ{\gamma}
+\defη{\eta}
+\def∂{\partial}
+\defξ{\xi}
+\defκ{\kappa}
+\defλ{\lambda}
+\defυ{\upsilon}
+\defχ{\chi}
+\defψ{\psi}
+\defβ{\beta}
+\defν{\nu}
+\defμ{\mu}
+\defΩ{\Omega} 
+\defΘ{\Theta}
+\defΠ{\Pi}
+\defΣ{\Sigma}
+\defΔ{\Delta}
+\defΦ{\Phi}
+\defΓ{\Gamma}
+\defΞ{\Xi}
+\defΛ{\Lambda}
+\def⇒{\Rightarrow}
+\def⇔{\Leftrightarrow}
+\def∈{\in}
+\def⊂{\subset}
+\def∪{\cup}
+\def∩{\cap}
+\def∃{\exists}
+\def∀{\forall}
+\def⇐{\Leftarrow}
+\def∋{\ni}
+\def⊃{\supset}
+\def×{\times}
+\def⋅{\cdot}
+\def⊗{\otimes}
+\def…{\mydots}
+\catcode`↑=13
+\catcode`←=13
+\catcode`↓=13
+\catcode`→=13
+\catcode`↑=13
+\catcode`←=13
+\catcode`↓=13
+\catcode`→=13
+
+\catcode`〈=13
+\catcode`〉=13
+\catcode`†=13
+\def〉{\rangle}
+\def〈{\langle}
+\def†{\dagger}
+\def↑{\uparrow}
+\def←{\leftarrow}
+\def↓{}
+\def→{}
+\makeatletter \renewcommand\d{\mathrm{d}}
+\makeatother
+\makeatletter
+\DeclareRobustCommand\ddt[1]{\frac{\d #1}{\d t}}
+\makeatother
+\makeatletter
+\DeclareRobustCommand\dex[1]{\frac{∂ #1}{∂x}}
+\makeatother
+\makeatletter
+\DeclareRobustCommand\det[1]{\frac{∂ #1}{∂t}}
+\makeatother
+\makeatletter
+\def\active@math@prime{\hspace*{1em}\kern-1em^\bgroup\prim@s}
+{\catcode`\'=\active \global\let'\active@math@prime}
+\def\prim@s{%
+  \prime\futurelet\@let@token\pr@m@s}
+\def\pr@m@s{%
+  \ifx'\@let@token
+    \expandafter\pr@@@s
+  \else
+    \ifx^\@let@token
+      \expandafter\expandafter\expandafter\pr@@@t
+    \else
+      \egroup
+    \fi
+  \fi}
+\def\pr@@@s#1{\prim@s}
+\def\pr@@@t#1#2{#2\egroup}
+\DeclareRobustCommand\widecheck[1]{{\mathpalette\@widecheck{#1}}}
+\def\@widecheck#1#2{%
+    \setbox\z@\hbox{\m@th$#1#2$}%
+    \setbox\tw@\hbox{\m@th$#1%
+       \widehat{%
+          \vrule\@width\z@\@height\ht\z@
+          \vrule\@height\z@\@width\wd\z@}$}%
+    \dp\tw@-\ht\z@
+    \@tempdima\ht\z@ \advance\@tempdima2\ht\tw@ \divide\@tempdima\thr@@
+    \setbox\tw@\hbox{%
+       \raise\@tempdima\hbox{\scalebox{1}[-1]{\lower\@tempdima\box
+\tw@}}}%
+{\ooalign{\box\tw@ \cr \box\z@}}}
+\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
+  \makeatother

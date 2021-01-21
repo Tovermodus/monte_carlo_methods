@@ -1,0 +1,26 @@
+\documentclass[11pt, a4paper]{scrbook}
+\input{header_book}
+\title{\color{mygray}\scshape\textbf{Sedimentationdings}}
+\author{\color{mygray}\scshape Niklas Thorsson\\Simon  Schmidt}
+\date{\color{mygray}\scshape WS2020/2021}
+\makeindex
+\indexsetup{level=\mychapters}
+\begin{document}
+\selectlanguage{english}
+\maketitle
+\renewcommand{\contentsname}{\Huge\hestyle{{Inhalt}}}
+\onehalfspacing
+\tableofcontents
+\singlespacing
+\color{black}
+\input{Introduction}
+\input{Scale}
+\input{AspectRatio}
+\input{SizeOfDomain}
+\input{Medium}
+\input{Potentials}
+\appendix
+\mychapters{Bibliography}
+\printbibliography[heading=none]
+\printindex
+\end{document}

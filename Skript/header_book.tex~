@@ -1,0 +1,289 @@
+%\usepackage{/home/tovermodus/Documents/Studium/8S/Mixed/notes-Kanschat/notes/mathsim}
+
+\usepackage{amsmath, mathtools}
+\usepackage{libertine}
+\usepackage{enumitem}
+\usepackage{polyglossia}        %Sprache
+\usepackage{amssymb, amsfonts, amsthm}      %ganz viel Mathe
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{tabulary}           %Tabellen
+\usepackage{fontspec}           %regelt UTF8 Input
+\usepackage{tabu, threeparttable}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{scalerel}
+\usepackage{imakeidx}
+\usepackage{bm}
+\usepackage{pgfplots}
+\usepackage{setspace}
+\usepackage[chapter]{algorithm}
+\usepackage{minted}
+%\usepackage[]{algorithm2e}
+\usepackage{breqn}
+\usepackage{float}
+\usepackage{needspace}
+\usepackage{tkz-euclide}
+\usepackage{xparse}
+\usepackage{xstring}
+\usepackage{fancyhdr}
+\usepackage[backend=biber, style=numeric, giveninits=true]{biblatex}
+
+\setmainlanguage{german}
+\setotherlanguage{english}
+\renewcommand*{\newunitpunct}{\addcomma\space}
+
+\renewcommand*{\mkbibnamefamily}[1]{\textsc{#1}}
+\pgfplotsset{compat=1.16}
+\DeclareFieldFormat*{title}{\mkbibemph{#1}}
+\DeclareFieldFormat*{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat{journaltitle}{#1}
+
+\renewbibmacro*{in:}{%
+\ifentrytype{article}
+{}
+{\printtext{\bibstring{in}\intitlepunct}}}
+
+\newbibmacro*{pubinstorg+location+date}[1]{%
+\printlist{#1}%
+\newunit
+\printlist{location}%
+\newunit
+\usebibmacro{date}%
+\newunit}
+
+\renewbibmacro*{publisher+location+date}{\usebibmacro{pubinstorg+location+date}{publisher}}
+\renewbibmacro*{institution+location+date}{\usebibmacro{pubinstorg+location+date}{institution}}
+\renewbibmacro*{organization+location+date}{\usebibmacro{pubinstorg+location+date}{organization}}
+
+\DeclareFieldFormat[article]{title}{#1}
+\usepackage{scalerel}
+\definecolor{mygray}{rgb}{0.1,0.1,.4}
+\usepackage[colorlinks = true, linkcolor = mygray, citecolor = mygray, urlcolor = mygray]{hyperref}
+
+%\RequirePackage{cleveref}
+
+
+\renewcommand{\sectionmark}[1]{\markright{\scshape\hfill
+\thesection. #1\hfill}}
+
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname. }
+\makeatother
+
+%----- Seiten-Layout:
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm} \setlength{\textwidth}{15cm}
+\setlength{\topmargin}{-1cm} \setlength{\headheight}{1cm}
+\setlength{\headsep}{1cm} \setlength{\topskip}{0cm}
+\setlength{\textheight}{22cm} \setlength{\parindent}{0em}
+\setlength{\parskip}{0.6em}
+\renewcommand{\bottomfraction}{.7}
+\swapnumbers
+
+\addtokomafont{part}{\normalfont\Huge\bfseries\scshape\color{mygray}\hspace*{-.5cm}}
+\addtokomafont{partnumber}{\normalfont\Huge\bfseries\scshape\color{mygray}\hspace*{-.5cm}}
+
+
+% \begingroup \setlength {\dimen@ }{#1}\vskip \z@ \@plus \dimen@ \penalty -100\vskip \z@ \@plus -\dimen@ \vskip \dimen@ \penalty 9999\vskip -\dimen@ \vskip \z@skip \endgroup
+\makeatletter
+
+\def\@begintheorem#1#2[#3]{
+\setlength {\dimen@ }{30pt}\vskip \z@ \@plus \dimen@ \penalty -100\vskip \z@ \@plus -\dimen@ \vskip \dimen@ \penalty 9999\vskip -\dimen@ \vskip \z@skip 
+\deferred@thm@head{\the\thm@headfont \thm@indent
+\@ifempty{#1}{\let\thmname\@gobble}{\let\thmname\@iden}%
+\@ifempty{#2}{\let\thmnumber\@gobble}{\let\thmnumber\@iden}%
+\@ifempty{#3}{\let\thmnote\@gobble}{\let\thmnote\@iden}%
+\thm@swap\swappedhead\thmhead{#1}{#2}{#3}%
+\the\thm@headpunct
+\thmheadnl
+%  \setlength {\dimen@ }{80pt}\vskip \z@ \@plus \dimen@ \penalty -100\vskip \z@ \@plus -\dimen@ \vskip \dimen@ \penalty 9999\vskip -\dimen@ \vskip \z@skip 
+% possibly a newline.
+\hskip\thm@headsep
+}%
+\ignorespaces}
+\makeatother
+\newtheoremstyle{defin}% <name>
+{15pt\topsep}%      Space above
+{\topsep}%      Space below
+{\color{black}\itshape}%         Body font
+{}%         Indent amount (empty = no indent, \parindent = para indent)
+{\color{mygray}\large\bfseries\scshape}% Thm head font
+{}%        Punctuation after thm head
+%{.5em}%     Space after thm head: " " = normal interword space;
+{\newline}%       \newline = linebreak
+{}%         Thm head spec (can be left empty, meaning `normal')
+
+\newtheoremstyle{satz}% <name>
+{15pt\topsep}%      Space above
+{\topsep}%      Space below
+{\color{black}\itshape}%         Body font
+{}%         Indent amount (empty = no indent, \parindent = para indent)
+{\color{mygray}\large\bfseries\scshape}% Thm head font
+{}%        Punctuation after thm head
+%{.5em}%     Space after thm head: " " = normal interword space;
+{\newline}%       \newline = linebreak
+{\scshape}%         Thm head spec (can be left empty, meaning `normal')
+
+\newtheoremstyle{bemerkung}% <name>
+{15pt\topsep}%      Space above
+{\topsep}%      Space below
+{\color{black}}%         Body font
+{}%         Indent amount (empty = no indent, \parindent = para indent)
+{\color{mygray}\large\bfseries\scshape}% Thm head font
+{}%        Punctuation after thm head
+%{.5em}%     Space after thm head: " " = normal interword space;
+{\newline}%       \newline = linebreak
+{\scshape}%         Thm head spec (can be left empty, meaning `normal')
+
+\theoremstyle{satz}
+\newtheorem{sat}{\iflanguage{german}{Satz}{Theorem}}[chapter]
+\newtheorem{lem}[sat]{Lemma}
+\newtheorem{kor}[sat]{\iflanguage{german}{Korollar}{Corollary}}
+\newtheorem{prop}[sat]{Proposition}
+\newtheorem{pro}[sat]{Proposition}
+\newtheorem{problem}[sat]{\iflanguage{german}{Aufgabe}{}\iflanguage{english}{Problem}{}}
+\newtheorem{solution}[sat]{\iflanguage{german}{Lösung}{}\iflanguage{english}{Solution}{}}
+\theoremstyle{bemerkung}
+\newtheorem{bem}[sat]{\iflanguage{german}{Bemerkung}{Remark}}
+\newtheorem{bsp}[sat]{\iflanguage{german}{Beispiel}{Example}}
+\theoremstyle{defin}
+\newtheorem{defin}[sat]{Definition}
+
+
+\newcommand\mysectioncaption{}
+
+%---- Kapitelnummern:
+%\renewcommand{\thechapter}{\Roman{chapter}}
+%---- Gleichungsnummern:
+\numberwithin{equation}{chapter}
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+%---- Abbildungen
+\numberwithin{figure}{chapter}
+\newcommand{\chapterhead}{}
+\newcommand{\tocstyle}[1]{\normalfont\scshape{\textrm{#1}}}
+\newcommand{\hestyle}[1]{\color{mygray}\normalfont\scshape{\textrm{#1}}}
+%---- Tabellen
+\numberwithin{table}{chapter}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[RO]{\scshape\color{mygray}\pagemark\color{black}}
+\fancyfoot[LE]{\scshape\color{mygray}\pagemark\color{black}}
+\color{black}
+\makeatother
+\newenvironment{abstract}
+{\begin{center}  \Large\color{mygray}\textsc{Abstract}\color{black}\vspace{0.5cm}\\\large\begin{minipage}{.9\textwidth} \begin{singlespace} }
+{\end{singlespace} \end{minipage} \end{center} \vspace{12pt}}
+\newenvironment{abstrakt}
+{\begin{center}  \Large\color{mygray}\textsc{Zusammenfassung}\color{black}\vspace{0.5cm}\\\large\begin{minipage}{.9\textwidth} \begin{singlespace} }
+{\end{singlespace} \end{minipage} \end{center} \vspace{12pt}}
+\newcommand{\mychapter}[2]{%\clearpage%\thispagestyle{scrheadings}
+\color{mygray}
+\refstepcounter{chapter}
+\chapter*{\Huge\hestyle{\thechapter. #1}}
+\addcontentsline{toc}{chapter}{\LARGE\tocstyle{\thechapter. #1}}
+\renewcommand{\chapterhead}{\scshape{\textrm{#2}}}
+\color{black}}
+\newcommand{\mychapters}[1]{%\clearpage%\thispagestyle{scrheadings}
+\color{mygray}
+\refstepcounter{chapter}
+\chapter*{\Huge\hestyle{#1}}
+\addcontentsline{toc}{chapter}{\LARGE\tocstyle{#1}}
+\renewcommand{\chapterhead}{#1}
+\renewcommand\mysectioncaption{#1}
+\fancyhead[CE]{\scshape\color{mygray}\hfill #1 \hfill\color{black}}
+\fancyhead[CO]{\scshape\color{mygray} \hfill #1 \hfill\color{black}}
+\color{black}}
+\renewcommand{\thesection}{\Alph{section}}
+\newcommand{\mysection}[1]{%\clearpage
+\color{mygray} \refstepcounter{section}
+\renewcommand\mysectioncaption{\scshape\thesection. #1}
+\section*{\LARGE\hestyle{{\thesection. #1}}}
+\addcontentsline{toc}{section}{\Large\tocstyle{{\thesection. #1}}}
+\fancyhead[CE]{\scshape\color{mygray}\hfill \thechapter. \chapterhead \hfill\color{black}}
+\fancyhead[CO]{\scshape\color{mygray} \hfill \mysectioncaption \hfill\color{black}}
+\color{black}}
+\newcommand{\mysections}[1]{%\clearpage
+\color{mygray} \refstepcounter{section}
+\renewcommand\mysectioncaption{#1}
+\renewcommand{\chapterhead}{#1}
+\section*{\LARGE\hestyle{{#1}}}
+\fancyhead[CE]{\scshape\color{mygray}\hfill #1 \hfill\color{black}}
+\fancyhead[CO]{\scshape\color{mygray} \hfill #1 \hfill\color{black}}
+\color{black}}
+\newcommand{\mysubsections}[1]{
+\color{mygray} \refstepcounter{subsection}
+\subsection*{\Large\hestyle{{\thesubsection \ #1}}}
+%\subsection{#1}
+\color{black}}
+\newcommand{\mysubsection}[1]{
+\color{mygray} \refstepcounter{subsection}
+\subsection*{\Large\hestyle{{\thesubsection \ #1}}}
+%\subsection{#1}
+\addcontentsline{toc}{subsection}{\Large\tocstyle{{\thesubsection. #1}}}
+\color{black}}
+
+%\renewcommand{\thesubsubsection}{\Alph{subsubsection}}
+\newcommand{\mysubsubsection}[1]{
+\color{mygray} \refstepcounter{subsubsection}
+\subsubsection*{\color{mygray}\large\hestyle{{\thesubsubsection \ #1}}}
+%\subsubsection{#1}
+\color{black}}
+
+\newcommand{\myparagraph}[1]{
+\color{mygray} \refstepcounter{paragraph}
+\paragraph*{\hestyle{ #1:}}
+\color{black}}
+\newenvironment{enum}{\vspace*{-0.7em}
+\begin{list}
+\theenumi
+{\usecounter{enumi}
+\setlength{\itemindent}{0.7cm}
+\setlength{\labelwidth}{0.5cm}\setlength{\leftmargin}{0cm}
+\setlength{\labelsep}{0.2cm}\setlength{\rightmargin}{0cm}
+\setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
+\setlength{\itemsep}{0ex plus 0.2ex}}}
+{\end{list}\vspace*{-0.7em}}
+\renewcommand{\theenumi}{{\normalfont\rmfamily\bfseries\color{mygray}(\roman{enumi})\color{black}}}
+\newcommand{\nummer}[1]{\renewcommand{\theenumi}{{\normalfont\rmfamily #1}}\item
+\renewcommand{\theenumi}  {{\normalfont\rmfamily (\alph{enumi})}} }
+\renewcommand{\labelenumi}{\theenumi}
+\renewcommand{\labelenumii}{\alph{enumii})}
+\renewcommand{\labelitemi}{\color{mygray}$\bullet$\color{black}}
+\renewcommand{\labelitemii}{\color{mygray}$\circ$\color{black}}
+\renewcommand{\labelitemiii}{\color{mygray}$\cdot$\color{black}}
+\renewcommand{\labelitemiv}{\color{mygray}$\ast$\color{black}}
+
+\makeatletter
+\def\l@section{\@dottedtocline{1}{1.5em}{1.5em}}
+\def\l@subsection{\@dottedtocline{2}{2.5em}{2em}}
+\def\l@subsection{\@dottedtocline{2}{2.5em}{2.5em}}
+
+%Weitere Koma-Skript Einstellungen
+\renewcommand*{\pnumfont}{%
+\color{mygray}\large\scshape\bfseries}
+\setkomafont{partentry}{\Large\scshape\bfseries}
+%\setkomafont{partentrynumber}{\Large\scshape\bfseries\color{mygray}}
+\setkomafont{chapterentry}{\large\scshape\bfseries}
+%\setkomafont{chapterentrynumber}{\large\scshape\bfseries\color{mygray}}
+%\setkomafont{sectionentry}{\scshape\bfseries}
+%\setkomafont{sectionentrynumber}{\scshape\bfseries\color{mygray}}
+\KOMAoption{toc}{graduated,bibliography}
+\addtokomafont{caption}{\color{mygray}}
+\makeatother
+
+
+\renewcommand{\proofname}{\scshape \color{mygray}\iflanguage{german}{Beweis}{Proof}\color{black}}
+\renewcommand\proof[1][\proofname]{%
+\par
+\pushQED{\qed}%
+\normalfont \topsep 6pt plus 6pt\relax
+\trivlist
+\item[\hskip\labelsep
+\bfseries\color{mygray} #1:\color{black}]\needspace{2\baselineskip}\hfill\newline\ignorespaces
+}
+\newcommand{\myemph}[1]{\emph{\color{mygray}#1}\index{#1}}
+\newcommand{\myemphnone}[1]{\emph{\color{mygray}#1}}
+\newcommand{\myemphind}[2]{\emph{\color{mygray}#1}\index{#2}}
+\input{/home/tovermodus/Documents/Studium/Sonstiges/header_allgemein}
+
