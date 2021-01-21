@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/Arch Linux) (preloaded format=xelatex 2021.1.20)  21 JAN 2021 11:55
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/Arch Linux) (preloaded format=xelatex 2021.1.20)  21 JAN 2021 12:22
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -2802,12 +2802,12 @@ Package biblatex Info: XeTeX detected.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'utf8'.
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'notes.bbl' not found.
-
-No file notes.bbl.
+Package biblatex Info: ... file 'notes.bbl' found.
+ (./notes.bbl)
 Package biblatex Info: Reference section=0 on input line 8.
 Package biblatex Info: Reference segment=0 on input line 8.
 Package hyperref Info: Link coloring ON on input line 8.
+
 (/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -3058,17 +3058,17 @@ Requested font "cmbsy6" at 6.0pt
 
 ]
 LaTeX Font Info:    Font shape `TU/LinBiolinum(0)/b/n' will be
-(Font)              scaled to size 14.4pt on input line 2.
+(Font)              scaled to size 14.4pt on input line 3.
 Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 14.4pt
  -> /usr/share/texmf-dist/fonts/opentype/public/libertine/LinBiolinum_RB.otf
 LaTeX Font Info:    Font shape `TU/LinBiolinum(0)/b/n' will be
-(Font)              scaled to size 17.28pt on input line 2.
+(Font)              scaled to size 17.28pt on input line 3.
 Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 17.28pt
  -> /usr/share/texmf-dist/fonts/opentype/public/libertine/LinBiolinum_RB.otf
 LaTeX Font Info:    Font shape `TU/LinBiolinum(0)/b/n' will be
-(Font)              scaled to size 12.0pt on input line 6.
+(Font)              scaled to size 12.0pt on input line 8.
 Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 12.0pt
  -> /usr/share/texmf-dist/fonts/opentype/public/libertine/LinBiolinum_RB.otf
@@ -3093,10 +3093,12 @@ apping=tex-text;" at 12.0pt
 
 
 ]
-
-LaTeX Warning: Empty bibliography on input line 24.
-
-[17] [18
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/sc' will be
+(Font)              scaled to size 10.95pt on input line 24.
+Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;+
+smcp;mapping=tex-text;" at 10.95pt
+ -> /usr/share/texmf-dist/fonts/opentype/public/libertine/LinLibertine_R.otf
+ [17] [18
 
 
 ]
@@ -3153,7 +3155,8 @@ braces):
 >  {english/babelname}  =>  {american}
 >  {english/localnumeral}  =>  {polyglossia@C@localnumeral}
 >  {english/Localnumeral}  =>  {polyglossia@C@localnumeral}.
- (./notes.aux
+
+(./notes.aux
 LaTeX Info: Redefining \rmfamily on input line 25.
 LaTeX Info: Redefining \sffamily on input line 25.
 LaTeX Info: Redefining \ttfamily on input line 25.
@@ -3166,23 +3169,14 @@ LaTeX Info: Redefining \ttfamily on input line 33.
 )
 Package rerunfilecheck Info: File `notes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-
-
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                notes
-(biblatex)                and rerun LaTeX afterwards.
-
 Package logreq Info: Writing requests to 'notes.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
- 64160 strings out of 477299
- 1464106 string characters out of 5838338
- 2493877 words of memory out of 5000000
- 82656 multiletter control sequences out of 15000+600000
- 417887 words of font info for 133 fonts, out of 8000000 for 9000
+ 64368 strings out of 477299
+ 1468166 string characters out of 5838338
+ 2493720 words of memory out of 5000000
+ 82861 multiletter control sequences out of 15000+600000
+ 417952 words of font info for 134 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
  112i,8n,123p,10619b,5400s stack positions out of 5000i,500n,10000p,200000b,80000s
 

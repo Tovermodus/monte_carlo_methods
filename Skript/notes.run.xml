@@ -41,7 +41,7 @@
   >
 ]>
 <requests version="1.0">
-  <internal package="biblatex" priority="9" active="1">
+  <internal package="biblatex" priority="9" active="0">
     <generic>latex</generic>
     <provides type="dynamic">
       <file>notes.bcf</file>
@@ -65,7 +65,7 @@
       <file>ngerman.lbx</file>
     </requires>
   </internal>
-  <external package="biblatex" priority="5" active="1">
+  <external package="biblatex" priority="5" active="0">
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>
@@ -84,7 +84,7 @@
       <file>notes.bcf</file>
     </requires>
     <requires type="editable">
-      <file>/home/tovermodus/Documents/Studium/Sonstiges/bibliothek.bib</file>
+      <file>bibliothek.bib</file>
     </requires>
   </external>
 </requests>

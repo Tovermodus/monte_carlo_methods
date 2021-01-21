@@ -25,6 +25,7 @@ def order_parameter(rods):
 if len(sys.argv) < 2:
     Tk().withdraw()
     filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')
+    #filename = askdirectory(initialdir='../../../plots')
 else:
     filename=str(sys.argv[1])
 
