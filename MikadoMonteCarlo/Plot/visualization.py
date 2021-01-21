@@ -141,8 +141,3 @@ while frame_active:
 
         clock.tick(min(fps,60))
 
-    if not  runthrough:
-        plot_order()
-    runthrough=True
-    #if runthrough==0:
-    #    runthrough=1
