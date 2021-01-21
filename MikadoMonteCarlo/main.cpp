@@ -27,10 +27,10 @@ int main()
 		loop.monte_carlo_step();
 	}
 	std::string command = "python3 ../Plot/Order_plot.py ../cmake-build-debug/PlotFiles/iterations:" +
-			      std::to_string((int)(iterations / plot_interval)) + params.to_string();
+			      std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
 	system(command.c_str());
 	command = "python3 ../Plot/visualization.py ../cmake-build-debug/PlotFiles/iterations:" +
-			      std::to_string((int)(iterations / plot_interval)) + params.to_string();
+		  std::to_string((int)(iterations / plot_interval)) + params.to_string();
 	system(command.c_str());
 	return 0;
 }

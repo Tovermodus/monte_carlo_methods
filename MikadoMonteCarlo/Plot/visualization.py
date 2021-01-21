@@ -16,11 +16,7 @@ screen = pygame.display.set_mode((pix_w,pix_h))
 clock = pygame.time.Clock()
 fps = 50
 pygame.display.set_caption("Data Visualisation")
-runthrough=False
 
-def order_parameter(rods):
-    angles=np.array([r.phi for r in rods])
-    return np.mean(2*np.cos(angles)**2-1)
 
 if len(sys.argv) < 2:
     Tk().withdraw()
@@ -31,17 +27,7 @@ else:
 #print(filename)
 #print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
-open(filename+"/order_parameter.txt", 'w').close()
 
-def plot_order():
-    with open(filename+"/order_parameter.txt", 'r') as f:
-        order_p=np.array(f.readlines(), dtype=float)
-        plt.plot(order_p)
-        plt.title(r'Order parameter $S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$')
-        plt.xlabel('timesteps')
-        plt.ylabel('order parameter')
-        plt.savefig(filename+"/order_parameter.png")
-        plt.show()
 
 def plot_file(name):
     global frame_active
@@ -60,11 +46,6 @@ def plot_file(name):
         x,y,phi = lines[i].split(' ')
         #print(x,y,phi)
         rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
-
-    if not runthrough:
-        with open(filename+"/order_parameter.txt", 'a') as f:
-            f.write(str(order_parameter(rods))+"\n")
-
 
     for rod in rods:
         rod.draw()
