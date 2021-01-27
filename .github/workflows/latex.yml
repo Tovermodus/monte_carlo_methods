@@ -1,0 +1,19 @@
+name: LaTeX document compiler
+  # You may pin to the exact commit or the version.
+  # uses: Sakul6499/GitHub-Action-LaTeX@84484d7411f7131bb8518650eabdb1bc155500e6
+uses: Sakul6499/GitHub-Action-LaTeX@v1.0.0
+with:
+    # The main LaTeX file (your root file)
+    latex_main_file: 
+    # The working directory for the LaTeX engine
+    working_directory: # optional
+    # The LaTeX engine to be invoked
+    latex_compiler: # optional, default is latexmk
+    # Arguments parsed to the LaTeX compiler
+    latex_compiler_arguments: # optional, default is -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+    # Packages to be installed (Arch-based [uses `pacman`]; `TexLive-Most` is installed)
+    system_packages: # optional
+    # Shell commands to execute _BEFORE_ compiling the LaTeX document
+    pre_task: # optional
+    # Shell commands to execute _AFTER_ compiling the LaTeX document
+    post_task: # optional
