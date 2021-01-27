@@ -9,5 +9,5 @@ jobs:
       - name: Compile LaTeX document
         uses: dante-ev/latex-action@master
         with:
-          args: -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
+          args: -xelatex -latexoption=-cd Skript -file-line-error -latexoption=-interaction=nonstopmode
           root_file: Skript/notes.tex
