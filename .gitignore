@@ -36,6 +36,6 @@ cmake-build-debug
 *.iml
 MikadoMonteCarlo/.idea/vcs.xml
 *~
-notes*
-!notes.tex
+*notes*
+!Skript/notes.tex
 #*
