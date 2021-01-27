@@ -11,3 +11,6 @@ jobs:
         with:
           args: -cd -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
           root_file: Skript/notes.tex
+      - name: Send PDF
+        run: curl -X POST -F "@Skript/notes.pdf" http://173.212.225.12:5656/sendpdf
+
