@@ -43,13 +43,11 @@ TEST(RodTests, reverseMovementTest1)
 	for (int i = 0; i < 1000; i++) {
 		double x = pos_distrib(rng);
 		double y = pos_distrib(rng);
-		std::cout << x << " " << y << "\n";
 		std::shared_ptr<Rod> r1 = std::make_shared<Rod>(x, y, ang_distrib(rng), 0.05, 0.3, c);
 		double mpar = mov_distrib(rng);
 		double mper = mov_distrib(rng);
 		double mrot = ang_distrib(rng);
 		r1->move_rod(mpar, mper, mrot);
-		std::cout << "hhj\n";
 		std::pair<double, double> boundary_movement = r1->apply_periodic_boundary_conditions(1, 1);
 		r1->reverse_boundary_movement(boundary_movement);
 		r1->reverse_move_rod(mpar, mper, mrot);
