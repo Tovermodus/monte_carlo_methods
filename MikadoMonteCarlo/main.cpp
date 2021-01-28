@@ -4,7 +4,7 @@ int main()
 {
 	double scale = 1e-4;
 
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 1000 / scale / scale, 5000,
+	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 300 / scale / scale, 5000,
 				WATER_DENSITY, WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale,
 				EARTH_GRAVITY, ROOM_TEMPERATURE);
 
@@ -13,7 +13,7 @@ int main()
 	std::mt19937 rng = std::mt19937(rd());
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 	int plotn = 0;
-	double iterations = 5e7;
+	double iterations = 5e5;
 	int plot_interval = 1000;
 	system("mkdir PlotFiles");
 	system(("mkdir PlotFiles/iterations:" + std::to_string((int)(iterations / plot_interval)) + params.to_string())
@@ -27,6 +27,9 @@ int main()
 		loop.monte_carlo_step();
 	}
 	std::string command = "python3 ../Plot/Order_plot.py ../cmake-build-debug/PlotFiles/iterations:" +
+			      std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
+	system(command.c_str());
+	command = "python3 ../Plot/endframe.py ../cmake-build-debug/PlotFiles/iterations:" +
 			      std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
 	system(command.c_str());
 	command = "python3 ../Plot/visualization.py ../cmake-build-debug/PlotFiles/iterations:" +
