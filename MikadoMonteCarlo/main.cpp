@@ -4,9 +4,9 @@ int main()
 {
 	double scale = 1e-4;
 
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 300 / scale / scale, 5000,
-				WATER_DENSITY, WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale,
-				EARTH_GRAVITY, ROOM_TEMPERATURE);
+	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 300 / scale / scale, 5000, WATER_DENSITY,
+				WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY,
+				ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
 	std::random_device rd; //Will be used to obtain a seed for the random number engine
@@ -30,7 +30,7 @@ int main()
 			      std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
 	system(command.c_str());
 	command = "python3 ../Plot/endframe.py ../cmake-build-debug/PlotFiles/iterations:" +
-			      std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
+		  std::to_string((int)(iterations / plot_interval)) + params.to_string() + "&";
 	system(command.c_str());
 	command = "python3 ../Plot/visualization.py ../cmake-build-debug/PlotFiles/iterations:" +
 		  std::to_string((int)(iterations / plot_interval)) + params.to_string();
