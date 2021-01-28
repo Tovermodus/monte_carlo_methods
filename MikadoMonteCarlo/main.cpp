@@ -2,10 +2,10 @@
 
 int main()
 {
-	double scale = 1e-4;
+	double scale = 5e-5;
 
 	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 1000 / scale / scale, 5000,
-				WATER_DENSITY, WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale,
+				WATER_DENSITY, WATER_VISCOSITY, true, 1 * std::pow(scale, 6), 1 * scale, 1 * scale,
 				EARTH_GRAVITY, ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";

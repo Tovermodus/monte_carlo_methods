@@ -178,5 +178,5 @@ double Rod::ellipsoid_radius(double x, double y) const
 	double transformed_x = inner_product(x - get_x(), y - get_y(), std::cos(get_angle()), std::sin(get_angle()));
 	double transformed_y =
 		inner_product(x - get_x(), y - get_y(), std::cos(get_angle() + M_PI), std::sin(get_angle() + M_PI));
-	return 2 * std::sqrt(std::pow(50 * transformed_x / length, 2) + std::pow(transformed_y / width, 2));
+	return 2 * std::sqrt(std::pow( transformed_x / length, 2) + std::pow(transformed_y / width, 2));
 }
