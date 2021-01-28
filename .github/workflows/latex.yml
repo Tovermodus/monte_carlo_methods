@@ -3,6 +3,7 @@ on: [push]
 jobs:
   build_latex:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'	
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
@@ -12,6 +13,5 @@ jobs:
           args: -cd -xelatex -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
           root_file: Skript/notes.tex
       - name: Send PDF
-	if: github.ref == 'refs/heads/master'
         run: curl -X POST -F "file=@Skript/notes.pdf" http://173.212.225.12:5656/sendpdf
 
