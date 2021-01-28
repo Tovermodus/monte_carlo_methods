@@ -6,6 +6,7 @@ from tkinter.filedialog import askdirectory
 import matplotlib.pyplot as plt
 import os
 
+Tk().withdraw()
 
 class Rod:
     def __init__(self, x, y, phi, length, width, domain_w, domain_h):
@@ -33,13 +34,14 @@ def plot_order():
         plt.xlabel('timesteps/1000')
         plt.ylabel('order parameter')
         plt.savefig(filename+"/order_parameter.png")
-        plt.show()
+        plt.close()
+        #plt.show()
 
         plt.plot(rej_p[1:])
         plt.xlabel('timesteps/1000')
         plt.ylabel('unchanged rods over plotinterval')
         plt.savefig(filename+"/rejection_parameter.png")
-        plt.show()
+        plt.close()
 
 
         fig, ax = plt.subplots(2, sharex='col')
@@ -53,7 +55,8 @@ def plot_order():
         ax[1].set_ylabel('unchanged rods over plotinterval')
         fig.set_size_inches(10,10)
         plt.savefig(filename+"/combined.png")
-        plt.show()
+        plt.close()
+        #plt.show()
 
 def plot_file(name):
     rods = []
@@ -104,6 +107,7 @@ for file in os.listdir(dir):
             plot_file(filename+"/"+str(i)+".txt")
 
         plot_order()
+        os.system('python3 ../Plot/endframe.py '+filename+"/")
     except AttributeError:
         print("attribERROR",filename)
 
