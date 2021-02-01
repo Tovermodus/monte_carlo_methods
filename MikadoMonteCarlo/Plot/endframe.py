@@ -20,7 +20,7 @@ if len(sys.argv) < 2:
     filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')+'/'
 else:
     filename=str(sys.argv[1])
-
+    print(filename)
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
 
 

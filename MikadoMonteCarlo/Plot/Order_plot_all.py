@@ -62,7 +62,10 @@ def plot_file(name):
     rods = []
 
     global old_rods
-    f = open(name)
+    try:
+        f = open(name)
+    except FileNotFoundError:
+        print("FileNotFoundError",name)
     lines = f.readlines()
     whline = lines[0][:-1]
     ws,hs =whline.split(' ')
@@ -107,7 +110,7 @@ for file in os.listdir(dir):
             plot_file(filename+"/"+str(i)+".txt")
 
         plot_order()
-        os.system('python3 ../Plot/endframe.py '+filename+"/")
+        os.system('python3 ../Plot/endframe.py "'+filename+'/"')
     except AttributeError:
         print("attribERROR",filename)
 
