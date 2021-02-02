@@ -177,14 +177,14 @@
 \newcommand{\mychapter}[2]{%\clearpage%\thispagestyle{scrheadings}
 \color{mygray}
 \refstepcounter{chapter}
-\chapter*{\Huge\hestyle{\thechapter. #1}}
+\section*{\Huge\hestyle{\thechapter. #1}}
 \addcontentsline{toc}{chapter}{\LARGE\tocstyle{\thechapter. #1}}
 \renewcommand{\chapterhead}{\scshape{\textrm{#2}}}
 \color{black}}
 \newcommand{\mychapters}[1]{%\clearpage%\thispagestyle{scrheadings}
 \color{mygray}
 \refstepcounter{chapter}
-\chapter*{\Huge\hestyle{#1}}
+\section*{\Huge\hestyle{#1}}
 \addcontentsline{toc}{chapter}{\LARGE\tocstyle{#1}}
 \renewcommand{\chapterhead}{#1}
 \renewcommand\mysectioncaption{#1}
@@ -195,7 +195,7 @@
 \newcommand{\mysection}[1]{%\clearpage
 \color{mygray} \refstepcounter{section}
 \renewcommand\mysectioncaption{\scshape\thesection. #1}
-\section*{\LARGE\hestyle{{\thesection. #1}}}
+\subsection*{\LARGE\hestyle{{\thesection. #1}}}
 \addcontentsline{toc}{section}{\Large\tocstyle{{\thesection. #1}}}
 \fancyhead[CE]{\scshape\color{mygray}\hfill \thechapter. \chapterhead \hfill\color{black}}
 \fancyhead[CO]{\scshape\color{mygray} \hfill \mysectioncaption \hfill\color{black}}
@@ -204,18 +204,18 @@
 \color{mygray} \refstepcounter{section}
 \renewcommand\mysectioncaption{#1}
 \renewcommand{\chapterhead}{#1}
-\section*{\LARGE\hestyle{{#1}}}
+\subsection*{\LARGE\hestyle{{#1}}}
 \fancyhead[CE]{\scshape\color{mygray}\hfill #1 \hfill\color{black}}
 \fancyhead[CO]{\scshape\color{mygray} \hfill #1 \hfill\color{black}}
 \color{black}}
 \newcommand{\mysubsections}[1]{
 \color{mygray} \refstepcounter{subsection}
-\subsection*{\Large\hestyle{{\thesubsection \ #1}}}
+\subsubsection*{\Large\hestyle{{\thesubsection \ #1}}}
 %\subsection{#1}
 \color{black}}
 \newcommand{\mysubsection}[1]{
 \color{mygray} \refstepcounter{subsection}
-\subsection*{\Large\hestyle{{\thesubsection \ #1}}}
+\subsubsection*{\Large\hestyle{{\thesubsection \ #1}}}
 %\subsection{#1}
 \addcontentsline{toc}{subsection}{\Large\tocstyle{{\thesubsection. #1}}}
 \color{black}}
