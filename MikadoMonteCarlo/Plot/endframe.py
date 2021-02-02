@@ -89,5 +89,4 @@ screen.fill((255,255,255))
 plot_file(filename+"/"+str(int(fileno)-1)+".txt")
 
 
-print(filename+'endscreen.png')
 pygame.image.save(screen, filename+'/endscreen.png')

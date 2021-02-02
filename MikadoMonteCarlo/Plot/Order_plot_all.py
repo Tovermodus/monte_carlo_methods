@@ -66,6 +66,7 @@ def plot_file(name):
         f = open(name)
     except FileNotFoundError:
         print("FileNotFoundError",name)
+        return
     lines = f.readlines()
     whline = lines[0][:-1]
     ws,hs =whline.split(' ')
@@ -99,18 +100,21 @@ dir = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')
 for file in os.listdir(dir):
     old_rods = [Rod(0, 0, 0, 0, 0, 0, 0 )]
     filename = dir+"/"+file
-
+    if os.path.exists(filename+"/endscreem.png"):
+        continue
     print(filename)
     #print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
     try :
-        fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
-        open(filename+"/order_parameter.txt", 'w').close()
+        try :
+            fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
+            open(filename+"/order_parameter.txt", 'w').close()
 
-        for i in range(int(fileno)):
-            plot_file(filename+"/"+str(i)+".txt")
+            for i in range(int(fileno)):
+                plot_file(filename+"/"+str(i)+".txt")
 
-        plot_order()
-        os.system('python3 ../Plot/endframe.py "'+filename+'/"')
-    except AttributeError:
-        print("attribERROR",filename)
-
+            plot_order()
+            os.system('python3 ../Plot/endframe.py "'+filename+'/"')
+        except AttributeError:
+            print("attribERROR",filename)
+    except Exception:
+        print(sys.exc_info())
