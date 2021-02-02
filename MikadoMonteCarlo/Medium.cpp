@@ -24,6 +24,7 @@ void Medium::initialize_rods(std::mt19937 &rng)
 		if (!rod_is_acceptable(new_rod)) {
 			cell->remove_rod(new_rod);
 		} else {
+			rods.push_back(new_rod);
 			rod_number++;
 		}
 		iterations++;
@@ -106,12 +107,10 @@ std::string Medium::to_string() const
 	ret << std::scientific << parameters.height << "\n";
 	ret << std::scientific << parameters.rod_width << " ";
 	ret << std::scientific << parameters.rod_length << "\n";
-	for (const std::shared_ptr<Cell> &c : cells) {
-		for (int i = 0; i < c->number_rods_in_cell(); i++) {
-			ret << std::scientific << c->get_rod_in_cell(i)->get_x() << " ";
-			ret << std::scientific << c->get_rod_in_cell(i)->get_y() << " ";
-			ret << std::scientific << c->get_rod_in_cell(i)->get_angle() << "\n";
-		}
+	for (const std::shared_ptr<Rod> &r : rods) {
+		ret << std::scientific << r->get_x() << " ";
+		ret << std::scientific << r->get_y() << " ";
+		ret << std::scientific << r->get_angle() << "\n";
 	}
 	return ret.str();
 }
