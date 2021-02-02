@@ -12,26 +12,19 @@ pygame.init()
 
 pix_w = 1000# (pix_w - 100)/(pix_h - 100) must be equal to w/h from real domain
 pix_h = 1000
-screen = pygame.display.set_mode((pix_w,pix_h))
-clock = pygame.time.Clock()
-fps = 50
-pygame.display.set_caption("Data Visualisation")
+screen = pygame.Surface((pix_w,pix_h))
 
 
 if len(sys.argv) < 2:
     Tk().withdraw()
-    filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')
-    #filename = askdirectory(initialdir='../../../plots')
+    filename = askdirectory(initialdir='../cmake-build-debug/PlotFiles/')+'/'
 else:
     filename=str(sys.argv[1])
-
-#print(filename)
-#print(re.search(r'(?<=iterations:)\S*?(?=-)',filename))
+    print(filename)
 fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
 
 
 def plot_file(name):
-    global frame_active
     rods = []
     f = open(name)
     lines = f.readlines()
@@ -45,7 +38,6 @@ def plot_file(name):
     w = float(ws)
     for i in range(2,len(lines)):
         x,y,phi = lines[i].split(' ')
-        #print(x,y,phi)
         rods.append(Rod(float(x),float(y),float(phi),l,w,dw,dh))
 
     for rod in rods:
@@ -86,40 +78,15 @@ class Rod:
         else:
             pygame.draw.line(screen,(0,0,0),[int(self.drawx + length_radius_x),
                                              pix_h-int(self.drawy + length_radius_y)],
-                                            [int(self.drawx - length_radius_x),
-                                             pix_h-int(self.drawy - length_radius_y)])
+                             [int(self.drawx - length_radius_x),
+                              pix_h-int(self.drawy - length_radius_y)])
 
-while frame_active:
-    font = pygame.font.SysFont(None, 24)
-    img = font.render(str(fps)+' frames per second', True, (0,0,0))
-    screen.blit(img, (0, 0))
 
-    for i in range(int(fileno)):
-        fpsrange = fps//30
-        if fpsrange > 1:
-            if i%fpsrange != 0:
-                #plot_file(filename+"/"+str(i)+".txt")
-                continue
-        ev = pygame.event.get()
-        for event in ev:
-            if event.type== pygame.QUIT:
-                frame_active = False
-            if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
-                if(pos[1] < 30):
-                    fps = int(300*(pos[0] + 2*max(0,pos[0]-300))/pix_w)
-                    img = font.render(str(fps)+' frames er second', True, (0,0,0))
-        if frame_active == False:
-            break
-        screen.fill((255,255,255))
-        plot_file(filename+"/"+str(i)+".txt")
-        vertices = [[0,0],[pix_w,0],[pix_w,30],[0,30]]
-        pygame.draw.polygon(screen, (255,0,0),vertices)
-        vertices = [[0,0],[int(pix_w*(i+1)/int(fileno)),0],[int(pix_w*(i+1)/int(fileno)),30],[0,30]]
-        pygame.draw.polygon(screen, (0,255,0),vertices)
-        screen.blit(img, (0, 0))
 
-        pygame.display.flip()
+font = pygame.font.SysFont(None, 24)
 
-        clock.tick(min(fps,60))
+screen.fill((255,255,255))
+plot_file(filename+"/"+str(int(fileno)-1)+".txt")
 
+
+pygame.image.save(screen, filename+'/endscreen.png')

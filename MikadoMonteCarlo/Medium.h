@@ -15,6 +15,7 @@
 class Medium {
     private:
 	std::vector<std::shared_ptr<Cell>> cells;
+	std::vector<std::shared_ptr<Rod>> rods;
 	std::shared_ptr<Rod> create_random_rod(std::mt19937 &rng) const;
 	bool rod_is_acceptable(const std::shared_ptr<Rod> &rod, bool log_reason = false) const;
 	std::shared_ptr<Cell> get_cell_of_rod(const std::shared_ptr<Rod> &rod) const;
