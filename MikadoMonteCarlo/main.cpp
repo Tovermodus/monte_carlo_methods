@@ -2,10 +2,10 @@
 
 int main()
 {
-	double scale = 1e-4;
+	double scale = 5e-4;
 
-	MediumParameters params(0.05 * scale, 0.001 * scale, IRON_DENSITY, 20, 300 / scale / scale, 5000, WATER_DENSITY,
-				WATER_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY,
+	MediumParameters params(0.1*0.6 * scale, 0.002*0.6 * scale, LITHIUM_DENSITY, 15, 300 / scale / scale, 5000, HONEY_DENSITY,
+				HONEY_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY,
 				ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
@@ -13,7 +13,7 @@ int main()
 	std::mt19937 rng = std::mt19937(rd());
 	MonteCarloLoop loop(params, rng, params.estimate_time_step());
 	int plotn = 0;
-	double iterations = 5e5;
+	double iterations = 5e8;
 	int plot_interval = 1000;
 	system("mkdir PlotFiles");
 	system(("mkdir PlotFiles/iterations:" + std::to_string((int)(iterations / plot_interval)) + params.to_string())
