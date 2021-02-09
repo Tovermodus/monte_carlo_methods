@@ -4,8 +4,8 @@ int main()
 {
 	double scale = 5e-4;
 
-	MediumParameters params(0.1*0.6 * scale, 0.002*0.6 * scale, LITHIUM_DENSITY, 15, 300 / scale / scale, 5000, HONEY_DENSITY,
-				HONEY_VISCOSITY, true, 0 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY,
+	MediumParameters params(0.1*0.6 * scale, 0.002*0.6 * scale, IRON_DENSITY, 15, 300 / scale / scale, 5000, WATER_DENSITY,
+				WATER_VISCOSITY, true, 5 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY,
 				ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
