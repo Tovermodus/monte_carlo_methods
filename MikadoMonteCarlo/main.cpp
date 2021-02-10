@@ -3,10 +3,10 @@
 int main()
 {
 	double scale = 3.5e-5;
-	double factor = 1./1;
-	MediumParameters params(factor*factor*0.1 * scale, 0.005 * scale/factor, IRON_DENSITY, (int)(8/factor), 30000 / scale / scale, 50000,
-				WATER_DENSITY, WATER_VISCOSITY, true, 00 * std::pow(scale, 6), 1 * scale, 1 * scale,
-				EARTH_GRAVITY, ROOM_TEMPERATURE);
+	double factor = 1. / 1;
+	MediumParameters params(factor * factor * 0.1 * scale, 0.005 * scale / factor, IRON_DENSITY, (int)(8 / factor),
+				30000 / scale / scale, 50000, WATER_DENSITY, WATER_VISCOSITY, true,
+				00 * std::pow(scale, 6), 1 * scale, 1 * scale, EARTH_GRAVITY, ROOM_TEMPERATURE);
 
 	std::cout << params.estimate_time_step() << "\n";
 	std::random_device rd; //Will be used to obtain a seed for the random number engine
