@@ -100,8 +100,30 @@ def plot_file(name):
     #print(len(old_rods),len(rods))
     old_rods = rods
 
-
-
+def print_last_time_avg_rej():
+    with open(filename+"/order_parameter.txt", 'r') as f:
+        #print(f.readlines())
+        tmp=np.array([el.split(';') for el in f.readlines()])
+        #print(tmp)
+        order_p=np.array(tmp[:,0], dtype=float)
+        rej_p=np.array(tmp[:,1], dtype=float)
+        avg_rej_p = rej_p[:-5]+rej_p[4:-1]+rej_p[3:-2]+rej_p[2:-3]+rej_p[1:-4]+rej_p[5:]
+        plt.plot(avg_rej_p)
+        plt.show()
+        m = np.max(avg_rej_p)
+        print(filename)
+        for i in range(len(avg_rej_p)-1,0,-1):
+            if avg_rej_p[i] < m*0.9:
+                print(i)
+                break
+        for i in range(len(avg_rej_p)-1,0,-1):
+            if avg_rej_p[i] < m*0.95:
+                print(i)
+                break
+        for i in range(len(avg_rej_p)-1,0,-1):
+            if avg_rej_p[i] < m*0.99:
+                print(i)
+                break
 
 
 
@@ -109,3 +131,4 @@ for i in range(int(fileno)):
     plot_file(filename+"/"+str(i)+".txt")
 
 plot_order()
+print_last_time_avg_rej()

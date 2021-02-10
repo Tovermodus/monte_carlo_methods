@@ -151,7 +151,7 @@ class MediumParameters {
 			break;
 		}
 		return "-rod_med:" + rod_medium + "-liquid_med:" + liquid_medium +
-		       "-rod_len:" + std::to_string(rod_length) + "-rod_width:" + std::to_string(rod_width) +
+		       "-rod_len*1000:" + std::to_string(rod_length*1000) + "-rod_width*1000:" + std::to_string(rod_width*1000) +
 		       "-rods_per_volume:" + std::to_string(rods_per_volume) +
 		       "-ellipsoidal_potential:" + std::to_string(ellipsoidal_potential / std::pow(width, 6)) +
 		       "-periodic_boundary:" + std::to_string(periodic_boundary_conditions) + "/";
