@@ -130,10 +130,10 @@ for file in os.listdir(dir):
     try :
         try :
             fileno=re.search(r'(?<=iterations:)\S*?(?=-)',filename).group(0)
-            open(filename+"/order_parameter.txt", 'w').close()
+            #open(filename+"/order_parameter.txt", 'w').close()
 
-            for i in range(int(fileno)):
-                plot_file(filename+"/"+str(i)+".txt")
+            #for i in range(int(fileno)):
+            #    plot_file(filename+"/"+str(i)+".txt")
 
             plot_order()
             print_last_time_avg_rej(filename)
