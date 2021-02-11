@@ -1,7 +1,7 @@
 \mychapter{Introduction}{Introduction}
-This project started with the intention to understand and reproduce the topics discussed in ~\cite{SED}. It simulates the sedimentation of rod particles in a two dimensional domain by mean of a Monte-Carlo simulation. Our main goal was to create a working Monte-Carlo formalism, reproduce a visualisation of the sedimentation and then change parameters and look at the dynamics.
+This project started with the intention to understand and reproduce the topics discussed in ~\cite{SED}. It simulates the sedimentation of rod particles in a two-dimensional domain by mean of a Monte-Carlo simulation. Our main goal was to create a working Monte-Carlo formalism, reproduce a visualisation of the sedimentation and then change parameters and look at the dynamics.
 \mysection{Model}
-We simulate the sedimentation of rectangular rods in a quadratic domain $[0,s]×[0,s]$. We first deposit $N$ rectangular rods with thickness $d = \hat ds$ and length $l = \hat ls$ for some $\hat d,\hat l∈(0,1)$ using a Random Sequential Adsorption model, until either the designated number of rods per volume $ρ$ is reached or a maximum number of tries have been executed. After this we use a Metropolis Hastings Algorithm to simulate the sedimentation dynamics. For each time step we generate a random movement based on Brownian motion as is done in \cite{BD}. Since our {\color{red} case} is slightly different, we have different diffusion coefficients. In our case these are given by
+We simulate the sedimentation of rectangular rods in a quadratic domain $[0,s]×[0,s]$. We first deposit $N$ rectangular rods with thickness $d = \hat ds$ and length $l = \hat ls$ for some $\hat d,\hat l∈(0,1)$ using a Random Sequential Adsorption model, until either the designated number of rods per volume $ρ$ is reached or a maximum number of tries have been executed. After this, we use a Metropolis-Hastings Algorithm to simulate the sedimentation dynamics. For each time step, we generate a random movement based on Brownian motion as is done in \cite{BD}. Since our {\color{red} case} is slightly different, we have different diffusion coefficients, given by
 \begin{equation}
   \begin{array}{RLL}
     D_‖ &= \frac{k_BT}{f_\|}\\
@@ -18,7 +18,7 @@ for the Stokes friction coefficients
   \end{array}
 \end{equation}
 where $η$ is the viscosity of the sourrounding medium and $γ_\| \approx -0.207$, $γ_\perp\approx0.839$ and $γ_r\approx-0.662$ are the end correction coefficients as given in~\cite{SED}.
-We can calculate the root of the mean squared displacement in each direction $δ_* = \sqrt{2D_*δt}$ for a timestep $δt$ and generate uniformly distributed random movements $u_*∈[-δ_*,δ_*]$ for a single rod which either move the rod parallel to its length axis ($u_\|$), perpendicular to its length axis ($u_\perp$) or rotate the rod ($u_r$). According to the metropolis Hastings algorithm we then calculate the difference in Energy $ΔU$ between the previous and the trial state and accept the movement with a probability of $\min(1,\exp(\frac{-ΔU}{k_BT}))$. The total energy of our system is
+We can calculate the root of the mean squared displacement in each direction $δ_* = \sqrt{2D_*δt}$ for a timestep $δt$ and generate uniformly distributed random movements $u_*∈[-δ_*,δ_*]$ for a single rod which either moves the rod parallel ($u_\|$), perpendicular to its length axis ($u_\perp$) or rotates the rod ($u_r$). According to the Metropolis-Hastings algorithm, we then calculate the difference in Energy $ΔU$ between the previous and the trial state and accept the movement with a probability of $\min(1,\exp(\frac{-ΔU}{k_BT}))$. The total energy of our system is
 \begin{equation}
   \begin{array}{RLL}
     U = \sum_{i=1}^N V_1(r_i) + \sum_{i,j=1}^N V_2(r_i,r_j) ,
@@ -39,22 +39,17 @@ where $z_i$ is the height component of $r_i$, $m = (ρ_r - ρ_m)ld^2$, $g$ is th
 where $c_e$ is a coefficient calibrating the strength of the ellipsoidal potential, $C$ is a very large number (we used $10^{200}$) and $θ$ is a function returning one if the two rods $r_i$ and $r_j$ overlap and zero otherwise. The first two terms form an ellipsoidal potential scaling with sixth power in the ellipsoidal radius.
 \mysection{Implementation Details}
 \mysubsection{Energy Evaluation}
-If we evaluate the energy, especially the inter-rod potentials, as described above, it is a $O(N^2)$ operation, which is not optimal. Firstly we only ever change a single rod and therefore the $ΔU$ can basically be calculated through the energy difference of a single rod. If we cut off the ellipsoidal potential after some distance, the rod-rod interactions are only local. This enables us to substructure our medium into smaller cells of a size which is such that a rod in a cell, after performing a movement\footnote{Since a movement can also be zero, this includes before the movement}, can only always interact with rods in neighbouring cells. We called these cells patch $P(i)$ of rod $i$, which holds all the relevant rods to calculate $i$'s energy. This means that the calculation of the difference in energy for a rod from $r_i^t$ changing its position to $r_i^{t+1}$ is
+If we evaluate the energy, especially the inter-rod potentials, as described above, it is a $O(N^2)$ operation, which is not optimal. Firstly we only ever change a single rod and therefore the $ΔU$ can be calculated through the energy difference of a single rod. Additionally, if we cut off the ellipsoidal potential after some distance, the rod-rod interactions are only local. This enables us to substructure our medium into smaller cells of a size which is such that a rod in a cell, before and after performing a movement, can only always interact with rods in the same cell or in neighbouring cells. We call the set of all rods in neighbouring cells and in the cell a rod lies in the patch $P(i)$ of rod $i$. $P(i)$ contains  all the relevant rods to calculate $i$'s energy. This means that the calculation of the difference in energy for a rod from $r_i^t$ changing its position to $r_i^{t+1}$ is
 \begin{equation}
   \begin{array}{RLL}
     ΔU = V_1(r_i^{t+1}) - V_1(r_i^t) + \sum_{j∈P(i)}V_2(r_i^{t+1},r_j) - V_2(r_i^t,r_j)
   \end{array}
 \end{equation}
-This results in a $O(\#P(i))$ computation cost, which especially for small movements and timesteps is much better than the original.
+This results in an $O(\#P(i))$ computation cost, which especially for small movements and timesteps is much better than the original. After each movement we need to update the patches efficiently (in $O(\#P(i))$) otherwise the bulk of the computational cost would come from the updates of the patch. Therefore we can not go over all rods in every iteration, this would be an $O(N^2)$ update as well, but we only update the patch where a rod was in before a movement and the patch a rod moves into, this is an $O(\#\text{neighbouring cells})$ operation. 
 \mysubsection{Collision Detection}
 We differ from~\cite{SED} in the way that we do not treat our rods as being just lines, we include their width in the collision detection. The way we do this is by looking for all intersections of the boundary lines of each pair of rods.
-\mysection{Evaluation}
 
-
-\mysubsection{Order Parameter}
+\mysection{Order Parameter}
 We used the same definition of the order parameter as used in ~\cite{SED} to ensure compareability:
-$$S_f= \frac{1}{N} \sum_{i=0}^N 2*cos^2(\phi_i)-1$$
-This parameter describes the average orientation of the rods, with the focus being on how close to the horizontal or vertical the particles are oriented. Since $\phi_i$ in our model is the angle between the horizontal and the rod, the order parameter goes to 1 for horizontal particles and towards -1 for vertical particles. It does not distinguish between mirror imaged angles, since the order parameter is symetric both around the vertical and the horizontal orientation point. 
-
-\mysubsection{Sedimentation Column Height}
-
+$$S_f= \frac{1}{N} \sum_{i=0}^N 2\cos^2(\phi_i)-1$$
+This parameter describes the average orientation of the rods, with the focus being on how close to the horizontal or vertical the particles are oriented. Since $\phi_i$ in our model is the angle between the horizontal and the rod, the order parameter goes to 1 for horizontal particles and towards -1 for vertical particles. It does not distinguish between mirror-imaged angles, since the order parameter is symmetric both around the vertical and the horizontal orientation point. 
